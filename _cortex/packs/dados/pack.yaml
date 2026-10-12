@@ -1,0 +1,139 @@
+id: dados
+nome: "Dados e Métricas"
+versao: "1.0"
+descricao: "Consulta rastreável, dicionário de métricas, funil e origens, cohort, atribuição, relatório recorrente, qualidade de dados e alerta de anomalia — um analista de dados com uma skill por tarefa."
+requer_config: [integracoes]
+sugerir_se: "integracao:dados or integracao:analytics or time:dados"
+time_padrao: dados
+
+# Instanciados sempre que o pack é instalado.
+# `docs/fonte-{{item.slug}}.md.tpl` gera uma ficha por integração de tipo `dados` ou `analytics`
+# (chave `itens` abaixo; CONTRATOS §5).
+itens:
+  "docs/fonte-{{item.slug}}.md.tpl": "integracoes:dados,analytics"
+
+arquivos_base:
+  - agents/analista-dados.agent.md.tpl
+  - docs/dicionario-metricas.md.tpl
+  - docs/taxonomia-origens.md.tpl
+  - "docs/fonte-{{item.slug}}.md.tpl"
+
+subfamilias:
+  - id: CONSULTAR.metrica
+    nome: "Consulta de métrica"
+    condicao: "integracao:dados or integracao:analytics"
+    sinais: ["qual foi o número", "quanto foi no período", "me dá o valor de", "consulta a métrica", "número para a reunião", "quantos no mês"]
+    obrigatorio: [analista-dados, consultar-metrica]
+    condicional:
+      - {se: "métrica ainda não definida no dicionário", abrir: "dicionario-de-metricas"}
+      - {se: "tem integração com MCP", abrir: "§3.2"}
+      - {se: "produto nomeado", abrir: "§3.1"}
+    complementar: [dicionario-metricas, "fonte-{integracao}"]
+    orcamento: 3
+    arquivos:
+      - skills/consultar-metrica.md.tpl
+
+  - id: DOCUMENTAR.fonte-de-dados
+    nome: "Ficha de fonte de dados"
+    condicao: "sempre"
+    sinais: ["documentar a fonte de dados", "ficha da base", "quais campos existem", "de onde vem esse dado", "granularidade da fonte", "limitações da base"]
+    obrigatorio: [analista-dados, mapear-fonte-de-dados]
+    condicional:
+      - {se: "tem integração com MCP", abrir: "§3.2"}
+      - {se: "a fonte alimenta uma métrica do dicionário", abrir: "dicionario-metricas"}
+    complementar: ["fonte-{integracao}"]
+    orcamento: 4
+    arquivos:
+      - skills/mapear-fonte-de-dados.md.tpl
+
+  - id: DOCUMENTAR.dicionario-metricas
+    nome: "Dicionário de métricas"
+    condicao: "sempre"
+    sinais: ["definir a métrica", "fórmula da métrica", "dono da métrica", "números diferentes para a mesma métrica", "o que conta como", "padronizar a definição"]
+    obrigatorio: [analista-dados, dicionario-de-metricas]
+    condicional:
+      - {se: "a métrica depende de etapa do funil", abrir: "taxonomia-origens"}
+      - {se: "a fonte da métrica não está documentada", abrir: "mapear-fonte-de-dados"}
+    complementar: [dicionario-metricas]
+    orcamento: 4
+    arquivos:
+      - skills/dicionario-de-metricas.md.tpl
+
+  - id: PLANEJAR.funil-e-origens
+    nome: "Funil e origens"
+    condicao: "sempre"
+    sinais: ["etapas do funil", "critério de passagem", "taxonomia de origem", "de-para de canal", "origem e canal", "nomenclatura de campanha"]
+    obrigatorio: [analista-dados, definir-funil-e-origens]
+    condicional:
+      - {se: "tem integração de CRM", abrir: "§3.2"}
+      - {se: "produto nomeado", abrir: "§3.1"}
+    complementar: [taxonomia-origens, dicionario-metricas]
+    orcamento: 5
+    arquivos:
+      - skills/definir-funil-e-origens.md.tpl
+
+  - id: ANALISAR.cohort
+    nome: "Análise de cohort"
+    condicao: "integracao:dados"
+    sinais: ["cohort", "retenção por mês de entrada", "safra de clientes", "curva de retenção", "tempo até converter", "cohort por canal"]
+    obrigatorio: [analista-dados, analise-de-cohort]
+    condicional:
+      - {se: "a métrica da cohort não está no dicionário", abrir: "dicionario-de-metricas"}
+      - {se: "produto nomeado", abrir: "§3.1"}
+    complementar: [dicionario-metricas]
+    orcamento: 5
+    arquivos:
+      - skills/analise-de-cohort.md.tpl
+
+  - id: ANALISAR.atribuicao
+    nome: "Atribuição multicanal"
+    condicao: "integracao:dados or integracao:analytics"
+    sinais: ["atribuição", "qual canal influenciou", "primeiro toque", "último toque", "jornada antes de converter", "crédito por canal"]
+    obrigatorio: [analista-dados, atribuicao-multicanal]
+    condicional:
+      - {se: "cobertura de rastreamento desconhecida", abrir: "§ qualidade-de-dados, quando OPERAR.qualidade-dados estiver ativa"}
+      - {se: "a decisão é de verba", abrir: "§ handoff ao estrategista do pack marketing"}
+    complementar: [taxonomia-origens, dicionario-metricas]
+    orcamento: 5
+    arquivos:
+      - skills/atribuicao-multicanal.md.tpl
+
+  - id: ANALISAR.relatorio-recorrente
+    nome: "Relatório recorrente"
+    condicao: "sempre"
+    sinais: ["relatório semanal", "fechamento dos números", "resumo de indicadores", "variação em relação ao período anterior", "leitura dos números", "report recorrente"]
+    obrigatorio: [analista-dados, relatorio-recorrente]
+    condicional:
+      - {se: "tem integração de dados ou analytics", abrir: "§ consultar-metrica, quando CONSULTAR.metrica estiver ativa"}
+      - {se: "houve queda ou pico relevante", abrir: "§ alerta-de-anomalia, quando ANALISAR.anomalia estiver ativa"}
+      - {se: "ciclo de planejamento definido", abrir: "§3.6"}
+    complementar: [dicionario-metricas]
+    orcamento: 6
+    arquivos:
+      - skills/relatorio-recorrente.md.tpl
+
+  - id: OPERAR.qualidade-dados
+    nome: "Qualidade de dados"
+    condicao: "integracao:crm or integracao:automacao-mkt or integracao:dados"
+    sinais: ["deduplicar", "campos obrigatórios vazios", "de-para de cargo", "padronizar segmento", "auditoria da base", "dado inválido", "qualidade do dado"]
+    obrigatorio: [analista-dados, qualidade-de-dados]
+    condicional:
+      - {se: "tem integração com MCP", abrir: "§3.2"}
+      - {se: "a limpeza vira campanha de reativação", abrir: "§ handoff ao redator do pack marketing"}
+    complementar: [taxonomia-origens]
+    orcamento: 4
+    arquivos:
+      - skills/qualidade-de-dados.md.tpl
+
+  - id: ANALISAR.anomalia
+    nome: "Alerta de anomalia"
+    condicao: "integracao:dados or integracao:analytics"
+    sinais: ["caiu de repente", "pico estranho", "fora do normal", "regra de alerta", "o que verificar quando cai", "detectar queda"]
+    obrigatorio: [analista-dados, alerta-de-anomalia]
+    condicional:
+      - {se: "a queda é de campanha ou canal de marketing", abrir: "§ handoff ao analista do pack marketing"}
+      - {se: "a causa pode ser de rastreamento", abrir: "§ qualidade-de-dados, quando OPERAR.qualidade-dados estiver ativa"}
+    complementar: [dicionario-metricas, "fonte-{integracao}"]
+    orcamento: 4
+    arquivos:
+      - skills/alerta-de-anomalia.md.tpl

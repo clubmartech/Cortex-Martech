@@ -1,0 +1,174 @@
+id: cs
+nome: "Customer Success e Suporte"
+versao: "1.0"
+descricao: "Onboarding, adoção, saúde da carteira, renovação, expansão, atendimento, incidentes, satisfação, ajuda e escuta do cliente — gestor de sucesso e atendente com uma skill por momento da jornada."
+requer_config: [produtos, publicos]
+sugerir_se: "time:cs or time:suporte or time:atendimento or time:customer-success"
+time_padrao: cs
+
+# Instanciados sempre que o pack é instalado.
+arquivos_base:
+  - agents/gestor-sucesso.agent.md.tpl
+  - agents/atendente.agent.md.tpl
+  - docs/jornada-cliente.md.tpl
+  - docs/matriz-risco-churn.md.tpl
+  - docs/respostas-modelo.md.tpl
+
+subfamilias:
+  - id: PLANEJAR.onboarding-cliente
+    nome: "Onboarding do cliente"
+    condicao: "sempre"
+    sinais: ["onboarding", "cliente novo", "plano de 30 60 90 dias", "kickoff", "implantação", "primeiro valor", "cliente não ativou"]
+    obrigatorio: [gestor-sucesso, onboarding-cliente, jornada-cliente]
+    condicional:
+      - {se: "produto nomeado", abrir: "§3.1"}
+      - {se: "o cliente veio com diagnóstico de vendas", abrir: "§ ficha de handoff do pack de vendas, se instalado"}
+      - {se: "precisa de artigo ou tutorial para o cliente", abrir: "artigo-central-ajuda"}
+    complementar: [plano-de-sucesso]
+    orcamento: 6
+    arquivos:
+      - skills/onboarding-cliente.md.tpl
+
+  - id: PLANEJAR.plano-sucesso
+    nome: "Plano de sucesso"
+    condicao: "sempre"
+    sinais: ["plano de sucesso", "objetivos do cliente", "marcos de valor", "revisão trimestral com o cliente", "reunião de resultados", "o que o cliente quer alcançar"]
+    obrigatorio: [gestor-sucesso, plano-de-sucesso]
+    condicional:
+      - {se: "produto nomeado", abrir: "§3.1"}
+      - {se: "o plano identifica risco", abrir: "matriz-risco-churn"}
+      - {se: "o plano identifica expansão", abrir: "playbook-expansao"}
+    complementar: [jornada-cliente, health-score]
+    orcamento: 6
+    arquivos:
+      - skills/plano-de-sucesso.md.tpl
+
+  - id: ANALISAR.saude-carteira
+    nome: "Saúde da carteira"
+    condicao: "sempre"
+    sinais: ["health score", "saúde da carteira", "cliente em risco", "sinal de churn", "carteira por faixa", "clientes verde amarelo vermelho", "quais clientes estão em risco"]
+    obrigatorio: [gestor-sucesso, health-score, matriz-risco-churn]
+    condicional:
+      - {se: "tem integração de dados ou CRM", abrir: "§3.2"}
+      - {se: "o risco pede ação de renovação", abrir: "playbook-renovacao"}
+      - {se: "o cliente está inativo", abrir: "reativacao-cliente"}
+    complementar: [jornada-cliente]
+    orcamento: 6
+    arquivos:
+      - skills/health-score.md.tpl
+
+  - id: PLANEJAR.renovacao
+    nome: "Renovação"
+    condicao: "sempre"
+    sinais: ["renovação", "contrato vence", "régua de renovação", "cliente não quer renovar", "negociar a renovação", "renovação em risco"]
+    obrigatorio: [gestor-sucesso, playbook-renovacao]
+    condicional:
+      - {se: "o cliente está em risco", abrir: "matriz-risco-churn"}
+      - {se: "a renovação inclui expansão", abrir: "playbook-expansao"}
+      - {se: "a proposta precisa de estrutura comercial", abrir: "§ skill de proposta do pack de vendas, se instalado"}
+    complementar: [health-score, plano-de-sucesso]
+    orcamento: 6
+    arquivos:
+      - skills/playbook-renovacao.md.tpl
+
+  - id: PLANEJAR.expansao
+    nome: "Expansão (upsell e cross-sell)"
+    condicao: "sempre"
+    sinais: ["upsell", "cross-sell", "expansão da conta", "qual produto oferecer ao cliente", "aumentar o contrato", "módulo adicional", "oferta para quem já é cliente"]
+    obrigatorio: [gestor-sucesso, playbook-expansao]
+    condicional:
+      - {se: "produto nomeado", abrir: "§3.1"}
+      - {se: "a expansão vira negociação comercial", abrir: "§ executivo de vendas do pack de vendas, se instalado"}
+      - {se: "o cliente não está saudável", abrir: "health-score"}
+    complementar: [plano-de-sucesso, jornada-cliente]
+    orcamento: 6
+    arquivos:
+      - skills/playbook-expansao.md.tpl
+
+  - id: CRIAR.resposta-cliente
+    nome: "Resposta ao cliente"
+    condicao: "sempre"
+    sinais: ["responder o ticket", "resposta ao cliente", "cliente reclamando", "chat de atendimento", "mensagem para o cliente", "escalar o atendimento", "cliente irritado"]
+    obrigatorio: [atendente, resposta-ticket, respostas-modelo]
+    condicional:
+      - {se: "canal WhatsApp ou SMS", abrir: "§ respostas-modelo — bloco de mensageria"}
+      - {se: "canal e-mail", abrir: "§ respostas-modelo — bloco de e-mail"}
+      - {se: "canal chat ou comunidade", abrir: "§ respostas-modelo — bloco de chat e comunidade"}
+      - {se: "produto nomeado", abrir: "§3.1"}
+      - {se: "é incidente ou instabilidade", abrir: "comunicado-incidente"}
+      - {se: "a resposta vira artigo de ajuda", abrir: "artigo-central-ajuda"}
+    complementar: [matriz-risco-churn]
+    orcamento: 5
+    arquivos:
+      - skills/resposta-ticket.md.tpl
+
+  - id: CRIAR.comunicado-incidente
+    nome: "Comunicado de incidente"
+    condicao: "sempre"
+    sinais: ["incidente", "instabilidade", "sistema fora do ar", "status do incidente", "comunicado de manutenção", "pós-incidente", "atualização do incidente"]
+    obrigatorio: [atendente, comunicado-incidente]
+    condicional:
+      - {se: "produto nomeado", abrir: "§3.1"}
+      - {se: "o incidente afeta renovação ou contas em risco", abrir: "matriz-risco-churn"}
+      - {se: "precisa de versão por canal", abrir: "respostas-modelo"}
+    complementar: [jornada-cliente]
+    orcamento: 4
+    arquivos:
+      - skills/comunicado-incidente.md.tpl
+
+  - id: ANALISAR.satisfacao
+    nome: "Satisfação (NPS e CSAT)"
+    condicao: "sempre"
+    sinais: ["NPS", "CSAT", "pesquisa de satisfação", "detratores", "promotores", "fechar o loop", "resultado da pesquisa"]
+    obrigatorio: [gestor-sucesso, pesquisa-satisfacao]
+    condicional:
+      - {se: "tem integração de dados", abrir: "§3.2"}
+      - {se: "detrator em conta relevante", abrir: "matriz-risco-churn"}
+      - {se: "os comentários viram pauta", abrir: "escuta-de-cliente"}
+    complementar: [health-score, jornada-cliente]
+    orcamento: 5
+    arquivos:
+      - skills/pesquisa-satisfacao.md.tpl
+
+  - id: DOCUMENTAR.ajuda
+    nome: "Central de ajuda"
+    condicao: "sempre"
+    sinais: ["artigo de ajuda", "central de ajuda", "base de conhecimento", "passo a passo para o cliente", "tutorial", "erro conhecido", "documentar a funcionalidade para o cliente"]
+    obrigatorio: [atendente, artigo-central-ajuda]
+    condicional:
+      - {se: "produto nomeado", abrir: "§3.1"}
+      - {se: "o artigo nasce de um ticket recorrente", abrir: "escuta-de-cliente"}
+      - {se: "o artigo precisa de captura ou vídeo", abrir: "§ agente de design do pack de marketing, se instalado"}
+    complementar: [respostas-modelo]
+    orcamento: 4
+    arquivos:
+      - skills/artigo-central-ajuda.md.tpl
+
+  - id: ANALISAR.escuta-cliente
+    nome: "Escuta do cliente"
+    condicao: "sempre"
+    sinais: ["o que os clientes estão dizendo", "voz do cliente", "tickets em dores", "temas recorrentes", "pauta a partir do atendimento", "insumo para produto", "frases dos clientes"]
+    obrigatorio: [gestor-sucesso, escuta-de-cliente]
+    condicional:
+      - {se: "tem integração de dados", abrir: "§3.2"}
+      - {se: "o achado vira artigo", abrir: "artigo-central-ajuda"}
+      - {se: "o achado vira pauta de marketing", abrir: "§ agente estrategista do pack de marketing, se instalado"}
+      - {se: "o achado vira objeção de venda", abrir: "§ matriz de objeções do pack de vendas, se instalado"}
+    complementar: [matriz-risco-churn, jornada-cliente]
+    orcamento: 6
+    arquivos:
+      - skills/escuta-de-cliente.md.tpl
+
+  - id: CRIAR.reativacao
+    nome: "Reativação de cliente"
+    condicao: "sempre"
+    sinais: ["cliente inativo", "parou de usar", "parou de comprar", "trazer de volta", "régua de reativação", "oferta de reativação", "reconquistar"]
+    obrigatorio: [gestor-sucesso, reativacao-cliente]
+    condicional:
+      - {se: "produto nomeado", abrir: "§3.1"}
+      - {se: "tem integração de automação de marketing", abrir: "§3.2"}
+      - {se: "a mensagem vai para canal com revisão anti-IA obrigatória", abrir: "§ agente de redação do pack de marketing, se instalado"}
+    complementar: [matriz-risco-churn, respostas-modelo]
+    orcamento: 5
+    arquivos:
+      - skills/reativacao-cliente.md.tpl

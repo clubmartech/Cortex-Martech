@@ -1,0 +1,239 @@
+id: marketing
+nome: "Marketing"
+versao: "1.0"
+descricao: "Criação, planejamento, análise e operação de marketing multicanal — redator, designer, estrategista e analista com uma skill por canal ativo."
+requer_config: [marcas, produtos, canais]
+sugerir_se: "sempre"
+time_padrao: marketing
+
+# Instanciados sempre que o pack é instalado, independentemente dos canais do config.
+arquivos_base:
+  - agents/redator.agent.md.tpl
+  - agents/designer.agent.md.tpl
+  - agents/estrategista.agent.md.tpl
+  - agents/analista.agent.md.tpl
+  - skills/redator-comum.md.tpl
+  - docs/benchmarks-canal.md.tpl
+  - "docs/criatividade-{{item.slug}}.md.tpl"
+  - docs/descoberta-bancos.md.tpl
+
+subfamilias:
+  - id: CRIAR.email
+    nome: "E-mail"
+    condicao: "canal:email"
+    sinais: ["e-mail", "fluxo de e-mails", "disparo", "régua", "assunto e preheader", "convite por e-mail", "lembrete por e-mail", "nutrição"]
+    obrigatorio: [redator, redator-comum, redator-email]
+    condicional:
+      - {se: "produto nomeado", abrir: "§3.1"}
+      - {se: "marca/voz pessoal assina", abrir: "§3.3"}
+      - {se: "vai usar prova de cliente", abrir: "§3.1 provas e cases no doc-raiz do produto"}
+      - {se: "tem integração de automação de marketing", abrir: "§3.2"}
+    complementar: [benchmarks-canal, "criatividade-{produto}"]
+    orcamento: 6
+    arquivos:
+      - skills/redator-email.md.tpl
+
+  - id: CRIAR.social-linkedin
+    nome: "Social — LinkedIn"
+    condicao: "canal:linkedin"
+    sinais: ["post de LinkedIn", "legenda do LinkedIn", "thought leadership", "perfil da empresa no LinkedIn", "carrossel em PDF", "post institucional"]
+    obrigatorio: [redator, redator-comum, redator-linkedin]
+    condicional:
+      - {se: "produto nomeado", abrir: "§3.1"}
+      - {se: "marca/voz pessoal assina", abrir: "§3.3"}
+      - {se: "vai usar prova de cliente", abrir: "§3.1 provas e cases no doc-raiz do produto"}
+    complementar: [benchmarks-canal, "criatividade-{produto}"]
+    orcamento: 5
+    arquivos:
+      - skills/redator-linkedin.md.tpl
+
+  - id: CRIAR.social-instagram
+    nome: "Social — Instagram e TikTok"
+    condicao: "canal:instagram or canal:tiktok"
+    sinais: ["post de Instagram", "carrossel", "reel", "stories", "vídeo curto vertical", "legenda", "capa do reel", "TikTok"]
+    obrigatorio: [redator, redator-comum, redator-instagram]
+    condicional:
+      - {se: "produto nomeado", abrir: "§3.1"}
+      - {se: "marca/voz pessoal assina", abrir: "§3.3"}
+      - {se: "vai usar prova de cliente", abrir: "§3.1 provas e cases no doc-raiz do produto"}
+    complementar: [benchmarks-canal, "criatividade-{produto}"]
+    orcamento: 5
+    arquivos:
+      - skills/redator-instagram.md.tpl
+
+  - id: CRIAR.social-comunidade
+    nome: "Social — Comunidade"
+    condicao: "canal:comunidade"
+    sinais: ["post da comunidade", "divulgar evento na comunidade", "novidade de produto para clientes", "pergunta para o grupo", "fórum de clientes", "thank you page do evento"]
+    obrigatorio: [redator, redator-comum, redator-comunidade]
+    condicional:
+      - {se: "produto nomeado", abrir: "§3.1"}
+      - {se: "marca/voz pessoal assina", abrir: "§3.3"}
+    complementar: [benchmarks-canal, "criatividade-{produto}"]
+    orcamento: 5
+    arquivos:
+      - skills/redator-comunidade.md.tpl
+
+  - id: CRIAR.lp
+    nome: "Landing page"
+    condicao: "canal:landing-page"
+    sinais: ["landing page", "texto da LP", "página de inscrição", "página de download", "página de demonstração", "bloco de abertura", "headline da página"]
+    obrigatorio: [redator, redator-comum, redator-lp]
+    condicional:
+      - {se: "produto nomeado", abrir: "§3.1"}
+      - {se: "vai usar prova de cliente", abrir: "§3.1 provas e cases no doc-raiz do produto"}
+    complementar: [benchmarks-canal, "criatividade-{produto}"]
+    orcamento: 4
+    arquivos:
+      - skills/redator-lp.md.tpl
+
+  - id: CRIAR.midia-paga
+    nome: "Mídia paga"
+    condicao: "canal:midia-paga"
+    sinais: ["anúncio", "copy de ads", "tráfego pago", "títulos para busca paga", "PMax", "criativo pago", "variações de anúncio", "iterar campanha com dados"]
+    obrigatorio: [redator, redator-comum, redator-midia-paga]
+    condicional:
+      - {se: "produto nomeado", abrir: "§3.1"}
+      - {se: "vai usar prova de cliente", abrir: "§3.1 provas e cases no doc-raiz do produto"}
+      - {se: "a peça precisa de arte", abrir: "designer"}
+    complementar: [benchmarks-canal, "criatividade-{produto}"]
+    orcamento: 5
+    arquivos:
+      - skills/redator-midia-paga.md.tpl
+
+  - id: CRIAR.whatsapp
+    nome: "WhatsApp e SMS"
+    condicao: "canal:whatsapp or canal:sms"
+    sinais: ["mensagem de WhatsApp", "disparo para a base", "SMS", "confirmação de interesse", "convite por mensagem", "reengajar lead", "template de mensagem"]
+    obrigatorio: [redator, redator-comum, redator-whatsapp]
+    condicional:
+      - {se: "produto nomeado", abrir: "§3.1"}
+      - {se: "tem integração de automação de marketing", abrir: "§3.2"}
+    complementar: [benchmarks-canal, "criatividade-{produto}"]
+    orcamento: 4
+    arquivos:
+      - skills/redator-whatsapp.md.tpl
+
+  - id: CRIAR.video
+    nome: "Vídeo"
+    condicao: "canal:youtube or canal:tiktok"
+    sinais: ["roteiro de vídeo", "vídeo longo", "case em vídeo", "podcast", "vídeo de demonstração", "tutorial em vídeo", "shorts", "vídeo de material rico"]
+    obrigatorio: [redator, redator-comum, roteiro-video]
+    condicional:
+      - {se: "produto nomeado", abrir: "§3.1"}
+      - {se: "marca/voz pessoal assina", abrir: "§3.3"}
+      - {se: "vai usar prova de cliente", abrir: "§3.1 provas e cases no doc-raiz do produto"}
+    complementar: [benchmarks-canal, "criatividade-{produto}"]
+    orcamento: 4
+    arquivos:
+      - skills/roteiro-video.md.tpl
+
+  - id: CRIAR.newsletter
+    nome: "Newsletter"
+    condicao: "canal:newsletter"
+    sinais: ["edição da newsletter", "notícias da semana", "curadoria", "versão da newsletter para redes", "assunto da edição", "boletim"]
+    obrigatorio: [redator, redator-comum, newsletter]
+    condicional:
+      - {se: "marca/voz pessoal assina", abrir: "§3.3"}
+      - {se: "tem canal de e-mail ativo", abrir: "redator-email"}
+    complementar: [benchmarks-canal]
+    orcamento: 4
+    arquivos:
+      - skills/newsletter.md.tpl
+
+  - id: CRIAR.arte
+    nome: "Arte e apresentação"
+    condicao: "sempre"
+    sinais: ["arte", "layout", "apresentação", "deck", "slides", "peças do evento", "ficha do criativo", "direção visual"]
+    obrigatorio: [designer, designer-pecas]
+    condicional:
+      - {se: "a peça tem texto", abrir: "redator"}
+      - {se: "produto nomeado", abrir: "§3.1"}
+      - {se: "tem integração de design", abrir: "§3.2"}
+    complementar: ["criatividade-{produto}"]
+    orcamento: 4
+    arquivos:
+      - skills/designer-pecas.md.tpl
+
+  - id: PLANEJAR.campanha
+    nome: "Campanha e plano do ciclo"
+    condicao: "sempre"
+    sinais: ["planejar campanha", "briefing de campanha", "plano do mês", "plano do ciclo", "cronograma de pautas", "pitch de pré-vendas", "o que vamos rodar", "leitura cruzada"]
+    obrigatorio: [estrategista, planejar-campanha]
+    condicional:
+      - {se: "produto nomeado", abrir: "§3.1"}
+      - {se: "vai usar prova de cliente", abrir: "§3.1 provas e cases no doc-raiz do produto"}
+      - {se: "precisa de diagnóstico antes do plano", abrir: "analisar-performance"}
+      - {se: "ciclo de planejamento definido", abrir: "§3.6"}
+    complementar: [benchmarks-canal, "criatividade-{produto}", descoberta-bancos]
+    orcamento: 7
+    arquivos:
+      - skills/planejar-campanha.md.tpl
+
+  - id: PLANEJAR.abm
+    nome: "Conta-alvo (ABM)"
+    condicao: "modelo_comercial:B2B or modelo_comercial:B2B2C"
+    sinais: ["plano de conta", "conta-alvo", "ABM", "stakeholders da conta", "como abordar a empresa X", "expansão na conta", "comitê de compra"]
+    obrigatorio: [estrategista, abm-conta]
+    condicional:
+      - {se: "produto nomeado", abrir: "§3.1"}
+      - {se: "tem integração de CRM", abrir: "§3.2"}
+      - {se: "território do público definido", abrir: "§3.4"}
+    complementar: ["criatividade-{produto}"]
+    orcamento: 4
+    arquivos:
+      - skills/abm-conta.md.tpl
+
+  - id: PLANEJAR.evento
+    nome: "Evento, webinar e live"
+    condicao: "oferta:evento or canal:eventos"
+    sinais: ["planejar webinar", "live", "evento presencial", "régua de lembretes", "show-up", "follow-up pós-evento", "reaproveitar a gravação", "plano do evento"]
+    obrigatorio: [estrategista, planejar-evento]
+    condicional:
+      - {se: "produto nomeado", abrir: "§3.1"}
+      - {se: "precisa de peças do evento", abrir: "designer-pecas"}
+      - {se: "precisa de e-mail ou LP do evento", abrir: "redator"}
+      - {se: "marca/voz pessoal assina", abrir: "§3.3"}
+    complementar: [benchmarks-canal, descoberta-bancos]
+    orcamento: 6
+    arquivos:
+      - skills/planejar-evento.md.tpl
+
+  - id: ANALISAR.performance
+    nome: "Performance e relatório"
+    condicao: "sempre"
+    sinais: ["como foi o canal", "resultado do mês", "relatório mensal", "por que caiu", "meta vs realizado", "onde cortar ou ampliar verba", "motivos de descarte", "diagnóstico"]
+    obrigatorio: [analista, analisar-performance]
+    condicional:
+      - {se: "tem integração de dados", abrir: "§3.2 e a família CONSULTAR.dado, se ativa"}
+      - {se: "produto nomeado", abrir: "§3.1"}
+      - {se: "o diagnóstico vira plano", abrir: "estrategista"}
+    complementar: [benchmarks-canal]
+    orcamento: 6
+    arquivos:
+      - skills/analisar-performance.md.tpl
+
+  - id: CONSULTAR.dado
+    nome: "Consulta de dado"
+    condicao: "integracao:dados"
+    sinais: ["lista de quem converteu", "leads da página", "conversões do formulário", "puxa o dado", "quantos leads vieram de", "exporta os convertidos"]
+    obrigatorio: [analista, consultar-dado]
+    condicional:
+      - {se: "tem integração com MCP", abrir: "§3.2"}
+    complementar: []
+    orcamento: 3
+    arquivos:
+      - skills/consultar-dado.md.tpl
+
+  - id: OPERAR.base
+    nome: "Base de contatos e rastreamento"
+    condicao: "integracao:crm or integracao:automacao-mkt"
+    sinais: ["limpar a base", "bounce alto", "duplicados", "higiene da base", "gerar UTMs", "padronizar rastreamento", "preparar a base para o disparo"]
+    obrigatorio: [analista, operar-base]
+    condicional:
+      - {se: "tem integração com MCP", abrir: "§3.2"}
+      - {se: "a limpeza vira campanha de reativação", abrir: "redator"}
+    complementar: [benchmarks-canal]
+    orcamento: 4
+    arquivos:
+      - skills/operar-base.md.tpl

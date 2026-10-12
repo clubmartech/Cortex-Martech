@@ -1,0 +1,663 @@
+{
+  "$schema": "cortex-mini-schema/1",
+  "title": "cortex.config.yaml",
+  "type": "object",
+  "required": [
+    "meta",
+    "sessao",
+    "organizacao",
+    "marcas",
+    "produtos",
+    "canais",
+    "integracoes",
+    "times",
+    "papeis",
+    "operacao",
+    "governanca",
+    "packs",
+    "rotas"
+  ],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "cortex_version",
+        "criado_em",
+        "onboarding"
+      ],
+      "properties": {
+        "schema_version": {
+          "type": "integer",
+          "enum": [
+            1
+          ]
+        },
+        "cortex_version": {
+          "type": "string"
+        },
+        "criado_em": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "onboarding": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "pending",
+                "partial",
+                "complete"
+              ]
+            },
+            "blocos_concluidos": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "assumidos": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "sessao": {
+      "type": "object",
+      "required": [
+        "idioma",
+        "ambiente",
+        "gate"
+      ],
+      "properties": {
+        "idioma": {
+          "type": "string",
+          "enum": [
+            "pt-BR",
+            "en",
+            "es"
+          ]
+        },
+        "ambiente": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "enum": [
+              "claude-code",
+              "cowork",
+              "codex",
+              "outra"
+            ]
+          }
+        },
+        "gate": {
+          "type": "string",
+          "enum": [
+            "declarativo",
+            "declarativo+hook"
+          ]
+        },
+        "papel_configurador": {
+          "type": "string"
+        },
+        "declaracao_leituras": {
+          "type": "string",
+          "enum": [
+            "sempre",
+            "sob-demanda"
+          ]
+        }
+      }
+    },
+    "organizacao": {
+      "type": "object",
+      "required": [
+        "nome",
+        "slug",
+        "segmento",
+        "modelo_comercial"
+      ],
+      "properties": {
+        "nome": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+        },
+        "segmento": {
+          "type": "string"
+        },
+        "modelo_comercial": {
+          "type": "string",
+          "enum": [
+            "B2B",
+            "B2C",
+            "B2B2C",
+            "misto"
+          ]
+        },
+        "porte": {
+          "type": "string",
+          "enum": [
+            "pequeno",
+            "medio",
+            "grande"
+          ]
+        },
+        "descricao": {
+          "type": "string"
+        }
+      }
+    },
+    "marcas": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "slug",
+          "nome",
+          "genero",
+          "tom"
+        ],
+        "properties": {
+          "slug": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "genero": {
+            "type": "string",
+            "enum": [
+              "m",
+              "f",
+              "neutro"
+            ]
+          },
+          "mae": {
+            "type": "boolean"
+          },
+          "tom": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          },
+          "termos_proibidos": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "termos_preferidos": {
+            "type": "object"
+          },
+          "site": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "produtos": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "slug",
+          "nome",
+          "tipo",
+          "marca"
+        ],
+        "properties": {
+          "slug": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "tipo": {
+            "type": "string",
+            "enum": [
+              "produto",
+              "servico",
+              "evento",
+              "conteudo"
+            ]
+          },
+          "marca": {
+            "type": "string"
+          },
+          "publicos": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "dor_principal": {
+            "type": "string"
+          },
+          "promessa": {
+            "type": "string"
+          },
+          "modulos": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "publicos": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "slug",
+          "nome",
+          "tipo"
+        ],
+        "properties": {
+          "slug": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "tipo": {
+            "type": "string",
+            "enum": [
+              "comprador",
+              "usuario",
+              "influenciador",
+              "parceiro"
+            ]
+          },
+          "dor": {
+            "type": "string"
+          },
+          "objecao": {
+            "type": "string"
+          },
+          "territorio": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "canais": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "slug"
+        ],
+        "properties": {
+          "slug": {
+            "type": "string",
+            "enum": [
+              "email",
+              "landing-page",
+              "blog",
+              "linkedin",
+              "instagram",
+              "tiktok",
+              "youtube",
+              "whatsapp",
+              "midia-paga",
+              "eventos",
+              "comunidade",
+              "newsletter",
+              "seo",
+              "pr",
+              "marketplace",
+              "push",
+              "loja-fisica",
+              "sms"
+            ]
+          },
+          "prioridade": {
+            "type": "integer"
+          },
+          "revisao_anti_ia": {
+            "type": "string",
+            "enum": [
+              "obrigatoria",
+              "oferecida"
+            ]
+          }
+        }
+      }
+    },
+    "vozes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "slug",
+          "papel"
+        ],
+        "properties": {
+          "slug": {
+            "type": "string"
+          },
+          "papel": {
+            "type": "string"
+          },
+          "doc": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "integracoes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "slug",
+          "tipo"
+        ],
+        "properties": {
+          "slug": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "tipo": {
+            "type": "string",
+            "enum": [
+              "registro",
+              "dados",
+              "crm",
+              "automacao-mkt",
+              "design",
+              "automacao",
+              "chat",
+              "repositorio",
+              "analytics",
+              "outro"
+            ]
+          },
+          "registro_primario": {
+            "type": "boolean"
+          },
+          "somente_leitura": {
+            "type": "boolean"
+          },
+          "mcp": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "times": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "slug",
+          "nome",
+          "papeis"
+        ],
+        "properties": {
+          "slug": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "pack": {
+            "type": "string"
+          },
+          "papeis": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "papeis": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "slug",
+          "nome"
+        ],
+        "properties": {
+          "slug": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "time": {
+            "type": "string"
+          },
+          "responsabilidades": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "ratifica-kernel",
+                "ratifica-skills",
+                "revisa-externo",
+                "revisa-dados",
+                "opera-registro",
+                "mantem-base"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "operacao": {
+      "type": "object",
+      "required": [
+        "ciclo_planejamento",
+        "destino_material_gerado",
+        "fluxo_chat_antes_do_arquivo",
+        "criar_arquivo_sem_pedido"
+      ],
+      "properties": {
+        "ciclo_planejamento": {
+          "type": "string",
+          "enum": [
+            "mensal",
+            "trimestral",
+            "sprint",
+            "nenhum"
+          ]
+        },
+        "destino_material_gerado": {
+          "type": "string",
+          "enum": [
+            "registro",
+            "saida-local",
+            "chat"
+          ]
+        },
+        "fluxo_chat_antes_do_arquivo": {
+          "type": "boolean"
+        },
+        "criar_arquivo_sem_pedido": {
+          "type": "boolean"
+        },
+        "revisao_anti_ia_padrao": {
+          "type": "string",
+          "enum": [
+            "obrigatoria",
+            "oferecida"
+          ]
+        }
+      }
+    },
+    "governanca": {
+      "type": "object",
+      "required": [
+        "comite",
+        "ratificador",
+        "git",
+        "telemetria",
+        "limites"
+      ],
+      "properties": {
+        "comite": {
+          "type": "boolean"
+        },
+        "ratificador": {
+          "type": "string"
+        },
+        "auditoria": {
+          "type": "object",
+          "properties": {
+            "periodicidade": {
+              "type": "string",
+              "enum": [
+                "semanal",
+                "quinzenal",
+                "mensal",
+                "nenhuma"
+              ]
+            },
+            "quando": {
+              "type": "string"
+            }
+          }
+        },
+        "git": {
+          "type": "boolean"
+        },
+        "telemetria": {
+          "type": "object",
+          "required": [
+            "ativa"
+          ],
+          "properties": {
+            "ativa": {
+              "type": "boolean"
+            },
+            "destino_env": {
+              "type": "string"
+            }
+          }
+        },
+        "dados_proibidos_em_prompt": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "limites": {
+          "type": "object",
+          "required": [
+            "aviso_kb",
+            "erro_kb"
+          ],
+          "properties": {
+            "aviso_kb": {
+              "type": "integer"
+            },
+            "erro_kb": {
+              "type": "integer"
+            },
+            "binario_mb": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    },
+    "packs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "versao",
+          "instalado_em"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "versao": {
+            "type": "string"
+          },
+          "instalado_em": {
+            "type": "string"
+          },
+          "subfamilias_ativas": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "rotas": {
+      "type": "object",
+      "required": [
+        "orcamento_padrao"
+      ],
+      "properties": {
+        "familias_inativas": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "orcamento_padrao": {
+          "type": "integer"
+        }
+      }
+    },
+    "interfaces": {
+      "type": "object",
+      "required": [
+        "ativo",
+        "raiz",
+        "manifesto"
+      ],
+      "properties": {
+        "ativo": {
+          "type": "boolean"
+        },
+        "raiz": {
+          "type": "string"
+        },
+        "manifesto": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

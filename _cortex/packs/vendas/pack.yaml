@@ -1,0 +1,170 @@
+id: vendas
+nome: "Vendas"
+versao: "1.0"
+descricao: "Prospecção, qualificação, diagnóstico, proposta, follow-up e gestão de pipeline — prospectador, executivo e líder de vendas com uma skill por etapa do ciclo comercial."
+requer_config: [produtos, publicos]
+sugerir_se: "modelo_comercial:B2B or modelo_comercial:B2B2C or time:vendas"
+time_padrao: vendas
+
+# Instanciados sempre que o pack é instalado, independentemente do modelo comercial.
+arquivos_base:
+  - agents/prospectador.agent.md.tpl
+  - agents/executivo-vendas.agent.md.tpl
+  - agents/lider-vendas.agent.md.tpl
+  - docs/matriz-objecoes.md.tpl
+  - docs/estagios-pipeline.md.tpl
+  - docs/dicionario-qualificacao.md.tpl
+
+subfamilias:
+  - id: CRIAR.cadencia
+    nome: "Cadência de prospecção"
+    condicao: "sempre"
+    sinais: ["cadência", "sequência de prospecção", "outbound", "toques por lead", "régua de prospecção", "primeiro contato com o lead", "lead inbound para abordar"]
+    obrigatorio: [prospectador, cadencia-prospeccao]
+    condicional:
+      - {se: "lead ainda não qualificado", abrir: "qualificacao-lead"}
+      - {se: "precisa das mensagens e ligações da cadência", abrir: "script-abordagem"}
+      - {se: "tem integração de CRM", abrir: "§3.2"}
+      - {se: "o texto final precisa de revisão de canal", abrir: "§ agente de redação do pack de marketing, se instalado"}
+    complementar: [matriz-objecoes, dicionario-qualificacao]
+    orcamento: 5
+    arquivos:
+      - skills/cadencia-prospeccao.md.tpl
+
+  - id: CRIAR.script-vendas
+    nome: "Script de abordagem"
+    condicao: "sempre"
+    sinais: ["script de ligação", "roteiro de cold call", "mensagem de abordagem", "abertura da ligação", "script por público", "agendar reunião por telefone"]
+    obrigatorio: [prospectador, script-abordagem]
+    condicional:
+      - {se: "produto nomeado", abrir: "§3.1"}
+      - {se: "vai tratar objeção no script", abrir: "matriz-objecoes"}
+      - {se: "a abordagem usa sinal da conta", abrir: "sinais-de-compra"}
+    complementar: [cadencia-prospeccao, dicionario-qualificacao]
+    orcamento: 5
+    arquivos:
+      - skills/script-abordagem.md.tpl
+
+  - id: CRIAR.proposta
+    nome: "Proposta comercial"
+    condicao: "sempre"
+    sinais: ["proposta comercial", "estrutura da proposta", "resumo executivo", "âncora de valor", "apresentar a proposta", "revisar a proposta"]
+    obrigatorio: [executivo-vendas, proposta-comercial]
+    condicional:
+      - {se: "produto nomeado", abrir: "§3.1"}
+      - {se: "não houve diagnóstico antes", abrir: "diagnostico-comercial"}
+      - {se: "a proposta precisa de arte ou deck", abrir: "§ agente de design do pack de marketing, se instalado"}
+    complementar: [matriz-objecoes, estagios-pipeline]
+    orcamento: 5
+    arquivos:
+      - skills/proposta-comercial.md.tpl
+
+  - id: CRIAR.follow-up
+    nome: "Follow-up comercial"
+    condicao: "sempre"
+    sinais: ["follow-up", "retomar contato", "cliente sumiu", "resumo da reunião", "cobrar resposta", "negociação parada", "encerrar negociação"]
+    obrigatorio: [executivo-vendas, follow-up]
+    condicional:
+      - {se: "o follow-up responde a uma objeção", abrir: "matriz-objecoes"}
+      - {se: "tem integração de CRM", abrir: "§3.2"}
+    complementar: [estagios-pipeline]
+    orcamento: 4
+    arquivos:
+      - skills/follow-up.md.tpl
+
+  - id: PLANEJAR.diagnostico-conta
+    nome: "Diagnóstico e qualificação"
+    condicao: "sempre"
+    sinais: ["reunião de diagnóstico", "perguntas de descoberta", "mapear decisores", "qualificar o lead", "fit com o perfil ideal", "ficha de qualificação", "quem decide na conta"]
+    obrigatorio: [executivo-vendas, diagnostico-comercial]
+    condicional:
+      - {se: "o lead ainda não passou pela qualificação", abrir: "qualificacao-lead"}
+      - {se: "precisa dos critérios oficiais de fit", abrir: "dicionario-qualificacao"}
+      - {se: "produto nomeado", abrir: "§3.1"}
+      - {se: "território do público definido", abrir: "§3.4"}
+    complementar: [matriz-objecoes, sinais-de-compra]
+    orcamento: 6
+    arquivos:
+      - skills/diagnostico-comercial.md.tpl
+      - skills/qualificacao-lead.md.tpl
+
+  - id: PLANEJAR.pipeline
+    nome: "Pipeline e forecast"
+    condicao: "sempre"
+    sinais: ["forecast", "previsão de fechamento", "pipeline ponderado", "cobertura de pipeline", "revisão de pipeline", "negócios parados", "taxa de passagem"]
+    obrigatorio: [lider-vendas, forecast-pipeline, estagios-pipeline]
+    condicional:
+      - {se: "tem integração de CRM ou de dados", abrir: "§3.2"}
+      - {se: "o gap pede leitura de perdas", abrir: "analise-motivos-de-perda"}
+      - {se: "o gap pede geração de demanda", abrir: "§ agente estrategista do pack de marketing, se instalado"}
+    complementar: [dicionario-qualificacao]
+    orcamento: 6
+    arquivos:
+      - skills/forecast-pipeline.md.tpl
+
+  - id: PLANEJAR.canal-parceiros
+    nome: "Canal de parceiros"
+    condicao: "modelo_comercial:B2B2C or publico:parceiro"
+    sinais: ["playbook do parceiro", "revenda", "canal indireto", "habilitar parceiro", "registro de oportunidade", "comissionamento", "conflito de canal"]
+    obrigatorio: [lider-vendas, playbook-canal-parceiros]
+    condicional:
+      - {se: "produto nomeado", abrir: "§3.1"}
+      - {se: "o parceiro precisa de script ou proposta", abrir: "script-abordagem"}
+    complementar: [matriz-objecoes, estagios-pipeline]
+    orcamento: 5
+    arquivos:
+      - skills/playbook-canal-parceiros.md.tpl
+
+  - id: ANALISAR.perdas
+    nome: "Motivos de perda"
+    condicao: "sempre"
+    sinais: ["motivos de perda", "por que perdemos", "perdas por estágio", "concorrente ganhando", "negócio perdido", "funil de vendas vaza", "padrão nas perdas"]
+    obrigatorio: [lider-vendas, analise-motivos-de-perda]
+    condicional:
+      - {se: "tem integração de CRM ou de dados", abrir: "§3.2"}
+      - {se: "as perdas apontam para objeção mal tratada", abrir: "matriz-objecoes"}
+      - {se: "as perdas apontam para lead fora do perfil", abrir: "dicionario-qualificacao"}
+    complementar: [estagios-pipeline]
+    orcamento: 6
+    arquivos:
+      - skills/analise-motivos-de-perda.md.tpl
+
+  - id: ANALISAR.sinais-de-compra
+    nome: "Sinais de compra"
+    condicao: "modelo_comercial:B2B or modelo_comercial:B2B2C"
+    sinais: ["sinais de compra", "o que está acontecendo na conta", "momento de abordar", "radar de contas", "notícias e vagas da conta", "intenção de compra", "monitorar contas-alvo"]
+    obrigatorio: [prospectador, sinais-de-compra]
+    condicional:
+      - {se: "o sinal vira abordagem", abrir: "script-abordagem"}
+      - {se: "tem integração de CRM", abrir: "§3.2"}
+      - {se: "a conta precisa de plano completo", abrir: "§ skill de conta-alvo do pack de marketing, se instalado"}
+    complementar: [dicionario-qualificacao]
+    orcamento: 5
+    arquivos:
+      - skills/sinais-de-compra.md.tpl
+
+  - id: OPERAR.passagem-mkt-vendas
+    nome: "Passagem marketing → vendas"
+    condicao: "time:marketing"
+    sinais: ["SLA do lead", "critério de MQL", "critério de SQL", "devolver lead", "passagem de lead", "lead sem contexto", "alinhamento marketing e vendas"]
+    obrigatorio: [lider-vendas, passagem-marketing-vendas, dicionario-qualificacao]
+    condicional:
+      - {se: "tem integração de CRM ou automação de marketing", abrir: "§3.2"}
+      - {se: "a devolução vira análise de qualidade de lead", abrir: "analise-motivos-de-perda"}
+    complementar: [estagios-pipeline]
+    orcamento: 4
+    arquivos:
+      - skills/passagem-marketing-vendas.md.tpl
+
+  - id: DOCUMENTAR.objecoes
+    nome: "Objeções e contorno"
+    condicao: "sempre"
+    sinais: ["objeção", "como respondo quando o cliente diz", "está caro", "já tenho fornecedor", "vou pensar", "prova para rebater", "registrar objeção nova"]
+    obrigatorio: [executivo-vendas, contorno-objecoes, matriz-objecoes]
+    condicional:
+      - {se: "produto nomeado", abrir: "§3.1"}
+      - {se: "a objeção aparece na prospecção", abrir: "script-abordagem"}
+    complementar: [dicionario-qualificacao]
+    orcamento: 4
+    arquivos:
+      - skills/contorno-objecoes.md.tpl

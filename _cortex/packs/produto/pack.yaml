@@ -1,0 +1,154 @@
+id: produto
+nome: "Produto e Product Marketing"
+versao: "1.0"
+descricao: "Posicionamento, mensagens por público, lançamento, battlecard e documentação de produto — release notes, avisos, central de ajuda, book de roadmap e triagem da entrada do PM."
+requer_config: [produtos, publicos]
+sugerir_se: "time:produto or oferta:produto"
+time_padrao: produto
+
+# Instanciados sempre que o pack é instalado. Todas as sub-famílias são `sempre`,
+# então as skills entram pelos blocos abaixo; aqui ficam os agentes e os docs.
+arquivos_base:
+  - agents/product-marketer.agent.md.tpl
+  - agents/documentador-produto.agent.md.tpl
+  - docs/matriz-mensagens.md.tpl
+  - docs/indice-publicacoes.md.tpl
+  - "docs/ficha-produto-{{item.slug}}.md.tpl"
+
+subfamilias:
+  - id: DOCUMENTAR.funcionalidade
+    nome: "Ficha de funcionalidade e central de ajuda"
+    condicao: "sempre"
+    sinais: ["documentar a funcionalidade", "artigo da central de ajuda", "como o cliente usa", "pré-requisitos e limites", "passo a passo da tela", "perguntas frequentes da funcionalidade"]
+    obrigatorio: [documentador-produto, documentar-funcionalidade]
+    condicional:
+      - {se: "produto tem módulos", abrir: "{produto}"}
+      - {se: "a ficha vira artigo ou aviso publicado", abrir: "registro-de-publicacao"}
+      - {se: "precisa de tela ou gif", abrir: "§ telas em _assets/ (ver skill)"}
+    complementar: [indice-publicacoes]
+    orcamento: 4
+    arquivos:
+      - skills/documentar-funcionalidade.md.tpl
+
+  - id: DOCUMENTAR.battlecard
+    nome: "Battlecard de concorrente"
+    condicao: "sempre"
+    sinais: ["battlecard", "comparar com o concorrente", "onde ganhamos e onde perdemos", "objeção sobre o concorrente", "o cliente citou o concorrente", "página de comparação"]
+    obrigatorio: [product-marketer, battlecard]
+    condicional:
+      - {se: "produto nomeado", abrir: "{produto}"}
+      - {se: "vai para peça externa", abrir: "§ validação humana obrigatória (governança §1)"}
+    complementar: [matriz-mensagens]
+    orcamento: 4
+    arquivos:
+      - skills/battlecard.md.tpl
+
+  - id: DOCUMENTAR.registro-publicacao
+    nome: "Registro do que foi publicado"
+    condicao: "sempre"
+    sinais: ["registrar a publicação", "índice do que saiu", "o que já publicamos sobre", "link do artigo publicado", "fechar o registro da entrega", "atualizar o índice de publicações"]
+    obrigatorio: [registrador, registro-de-publicacao]  # 2026-10-09: documentador-produto podado
+    condicional:
+      - {se: "a publicação vira prova para marketing", abrir: "§ provas no doc-raiz do produto (contexto/produtos/<slug>/)"}
+      - {se: "tem registro integrado", abrir: "§3.2"}
+    complementar: [indice-publicacoes]
+    orcamento: 3
+    arquivos:
+      - skills/registro-de-publicacao.md.tpl
+
+  - id: CRIAR.release-notes
+    nome: "Release notes"
+    condicao: "sempre"
+    sinais: ["release notes", "notas da versão", "o que mudou nesta versão", "lista de entregas do mês", "changelog para o cliente", "novidades da versão"]
+    obrigatorio: [documentador-produto, release-notes]
+    condicional:
+      - {se: "produto nomeado", abrir: "{produto}"}
+      - {se: "o texto sai por e-mail, comunidade ou in-app", abrir: "matriz-mensagens"}
+    complementar: [indice-publicacoes]
+    orcamento: 4
+    arquivos:
+      - skills/release-notes.md.tpl
+
+  - id: CRIAR.aviso-produto
+    nome: "Aviso de produto"
+    condicao: "sempre"
+    sinais: ["aviso de mudança", "descontinuação", "aviso in-app", "comunicar a novidade ao cliente", "avisar os parceiros", "mudança de comportamento do sistema", "prazo para migrar"]
+    obrigatorio: [documentador-produto, aviso-de-produto]
+    condicional:
+      - {se: "produto nomeado", abrir: "{produto}"}
+      - {se: "o aviso tem público parceiro", abrir: "§3.4"}
+      - {se: "o aviso vira e-mail ou post", abrir: "§ handoff ao redator do pack marketing"}
+    complementar: [matriz-mensagens, indice-publicacoes]
+    orcamento: 4
+    arquivos:
+      - skills/aviso-de-produto.md.tpl
+
+  - id: CRIAR.book-roadmap
+    nome: "Book de roadmap"
+    condicao: "sempre"
+    sinais: ["book de roadmap", "o que vem por aí", "entregas do trimestre", "apresentar o roadmap ao cliente", "roadmap por horizonte", "resumo das entregas do período"]
+    obrigatorio: [documentador-produto, book-de-roadmap]
+    condicional:
+      - {se: "produto tem módulos", abrir: "{produto}"}
+      - {se: "precisa de diagramação", abrir: "§ handoff ao designer do pack marketing"}
+      - {se: "inclui release notes do período", abrir: "release-notes"}
+    complementar: [indice-publicacoes]
+    orcamento: 5
+    arquivos:
+      - skills/book-de-roadmap.md.tpl
+
+  - id: PLANEJAR.lancamento
+    nome: "Lançamento"
+    condicao: "sempre"
+    sinais: ["plano de lançamento", "lançar a funcionalidade", "go-to-market", "tier do lançamento", "cronograma do lançamento", "kit de peças do lançamento", "o que precisa para lançar"]
+    obrigatorio: [product-marketer, plano-de-lancamento]
+    condicional:
+      - {se: "produto nomeado", abrir: "{produto}"}
+      - {se: "ainda não há posicionamento", abrir: "posicionamento-produto"}
+      - {se: "ciclo de planejamento definido", abrir: "§3.6"}
+      - {se: "as peças vão para os canais", abrir: "§ handoff ao estrategista do pack marketing"}
+    complementar: [matriz-mensagens, indice-publicacoes]
+    orcamento: 7
+    arquivos:
+      - skills/plano-de-lancamento.md.tpl
+
+  - id: PLANEJAR.posicionamento
+    nome: "Posicionamento e mensagens"
+    condicao: "sempre"
+    sinais: ["posicionamento do produto", "proposta de valor", "mensagem para cada público", "o que prometemos", "diferenciais", "o que nunca afirmar", "matriz de mensagens", "pitch do produto"]
+    obrigatorio: [product-marketer, posicionamento-produto, mensagens-por-publico]
+    condicional:
+      - {se: "produto nomeado", abrir: "{produto}"}
+      - {se: "há concorrente nomeado", abrir: "battlecard"}
+      - {se: "território do público definido", abrir: "§3.4"}
+    complementar: [matriz-mensagens]
+    orcamento: 6
+    arquivos:
+      - skills/posicionamento-produto.md.tpl
+      - skills/mensagens-por-publico.md.tpl
+
+  - id: ANALISAR.pesquisa-cliente
+    nome: "Pesquisa com cliente"
+    condicao: "sempre"
+    sinais: ["entrevista de discovery", "roteiro de entrevista", "sintetizar as entrevistas", "o que os clientes disseram", "validar a dor com o cliente", "pesquisa com usuário", "ouvir o cliente antes de lançar"]
+    obrigatorio: [product-marketer, pesquisa-com-cliente]
+    condicional:
+      - {se: "produto nomeado", abrir: "{produto}"}
+      - {se: "a síntese muda o posicionamento", abrir: "posicionamento-produto"}
+    complementar: [matriz-mensagens]
+    orcamento: 5
+    arquivos:
+      - skills/pesquisa-com-cliente.md.tpl
+
+  - id: OPERAR.triagem-produto
+    nome: "Triagem da entrada de produto"
+    condicao: "sempre"
+    sinais: ["triagem da entrada", "o PM mandou o material", "isso vira doc ou aviso", "prioridade da entrega", "o que fazer com essa entrega", "chegou material de produto"]
+    obrigatorio: [documentador-produto, triagem-entrada-produto]
+    condicional:
+      - {se: "tem registro integrado", abrir: "§3.2"}
+      - {se: "a entrega vira lançamento", abrir: "plano-de-lancamento"}
+    complementar: [indice-publicacoes]
+    orcamento: 4
+    arquivos:
+      - skills/triagem-entrada-produto.md.tpl

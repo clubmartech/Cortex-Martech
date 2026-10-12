@@ -1,0 +1,184 @@
+id: eventos
+nome: "Eventos"
+versao: "1.0"
+descricao: "Eventos presenciais, online e híbridos com bilheteria, patrocínio, speakers e pós-evento — um produtor dono do ciclo da edição e uma skill por etapa."
+requer_config: [marcas, publicos]
+sugerir_se: "oferta:evento or canal:eventos"
+time_padrao: marketing
+
+# Instanciados sempre que o pack é instalado, mesmo sem oferta `tipo: evento` ou canal `eventos` no config.
+# Sem essas condições o pack fica inativo (sub-famílias em ROTAS.md §5) e só o agente e os três docs existem.
+arquivos_base:
+  - agents/produtor-evento.agent.md.tpl
+  - docs/ficha-edicao.md.tpl
+  - docs/regras-comunicacao-evento.md.tpl
+  - docs/modelo-iniciativa-evento.md.tpl
+
+subfamilias:
+  - id: PLANEJAR.edicao-evento
+    nome: "Edição do evento — ciclo, lotes e escada de preço"
+    condicao: "oferta:evento or canal:eventos"
+    sinais: ["planejar a edição", "desenhar o ciclo de vendas", "quantos lotes", "calendário reverso do evento", "escada de preço", "cortesias da edição", "formato presencial ou online", "metas de público e receita"]
+    obrigatorio: [produtor-evento, planejar-edicao-evento, ficha-edicao]
+    condicional:
+      - {se: "vai projetar receita ou comparar cenários", abrir: "projetar-receita-evento"}
+      - {se: "tem patrocinador", abrir: "captar-patrocinio"}
+      - {se: "a edição já tem pasta em iniciativas/", abrir: "§3.7"}
+      - {se: "ciclo de planejamento definido", abrir: "§3.6"}
+    complementar: [modelo-iniciativa-evento, regras-comunicacao-evento]
+    orcamento: 7
+    arquivos:
+      - skills/planejar-edicao-evento.md.tpl
+
+  - id: PLANEJAR.receita-evento
+    nome: "Receita do evento — modelo e cenários"
+    condicao: "oferta:evento or canal:eventos"
+    sinais: ["quanto o evento vai faturar", "projeção de receita de ingressos", "cenário de bilheteria", "ponto de quebra da meta", "e se vender menos ingresso", "receita de patrocínio no modelo"]
+    obrigatorio: [produtor-evento, projetar-receita-evento, ficha-edicao]
+    condicional:
+      - {se: "tem patrocinador", abrir: "captar-patrocinio"}
+      - {se: "cupom ou desconto entra no cenário", abrir: "apurar-cupons-evento"}
+      - {se: "tem integração de dados", abrir: "§3.2"}
+    complementar: [planejar-edicao-evento]
+    orcamento: 6
+    arquivos:
+      - skills/projetar-receita-evento.md.tpl
+
+  - id: PLANEJAR.patrocinio
+    nome: "Patrocínio — cotas, contrapartidas e pipeline"
+    condicao: "oferta:evento or canal:eventos"
+    sinais: ["cotas de patrocínio", "proposta para patrocinador", "contrapartidas", "pipeline de patrocinadores", "quanto cobrar da cota", "o que o patrocinador ganha", "renovar patrocínio"]
+    obrigatorio: [produtor-evento, captar-patrocinio, ficha-edicao]
+    condicional:
+      - {se: "a proposta vira apresentação", abrir: "§3.7 iniciativa + o agente designer do pack marketing, se instalado"}
+      - {se: "patrocinador tem cupom ou cortesia", abrir: "apurar-cupons-evento"}
+      - {se: "tem integração de CRM", abrir: "§3.2"}
+    complementar: [regras-comunicacao-evento]
+    orcamento: 5
+    arquivos:
+      - skills/captar-patrocinio.md.tpl
+
+  - id: PLANEJAR.speakers
+    nome: "Speakers — curadoria, convite e grade"
+    condicao: "oferta:evento or canal:eventos"
+    sinais: ["curadoria de palestrantes", "convidar speaker", "grade de palestras", "briefing do palestrante", "critério para escolher speaker", "painel ou palestra", "trilhas do evento"]
+    obrigatorio: [produtor-evento, curadoria-speakers, ficha-edicao]
+    condicional:
+      - {se: "speaker é voz pessoal da organização", abrir: "§3.3"}
+      - {se: "o speaker vai para peça de divulgação", abrir: "kit-comunicacao-evento"}
+      - {se: "a grade vira roteiro do dia", abrir: "run-of-show"}
+    complementar: [regras-comunicacao-evento]
+    orcamento: 5
+    arquivos:
+      - skills/curadoria-speakers.md.tpl
+
+  - id: PLANEJAR.divulgacao-evento
+    nome: "Divulgação do evento — calendário por canal e kit de comunicação"
+    condicao: "oferta:evento or canal:eventos"
+    sinais: ["calendário de divulgação do evento", "o que sai esta semana do evento", "véspera de virada de lote", "quando ligar a mídia do evento", "regras de comunicação do evento", "grafia do nome do evento", "checklist da peça do evento"]
+    obrigatorio: [produtor-evento, calendario-divulgacao-evento, kit-comunicacao-evento, ficha-edicao]
+    condicional:
+      - {se: "a peça é de um canal", abrir: "§3.7 iniciativa + a sub-skill do canal no pack marketing"}
+      - {se: "tem patrocinador", abrir: "captar-patrocinio"}
+      - {se: "precisa de arte", abrir: "§3.7 iniciativa + o agente designer do pack marketing, se instalado"}
+      - {se: "tem integração de automação de marketing", abrir: "§3.2"}
+    complementar: [regras-comunicacao-evento, curadoria-speakers]
+    orcamento: 7
+    arquivos:
+      - skills/calendario-divulgacao-evento.md.tpl
+      - skills/kit-comunicacao-evento.md.tpl
+
+  - id: ANALISAR.metas-evento
+    nome: "Metas do evento — realizado contra a curva"
+    condicao: "oferta:evento or canal:eventos"
+    sinais: ["como está a venda de ingressos", "quanto falta para a meta do evento", "acompanhamento semanal da bilheteria", "fechamento do lote", "checkpoint do ciclo", "report do evento para a liderança"]
+    obrigatorio: [produtor-evento, acompanhar-metas-evento, ficha-edicao]
+    condicional:
+      - {se: "a pergunta é por que o número é esse", abrir: "analisar-ciclo-evento"}
+      - {se: "cupom, parceiro ou colaborador entram na conta", abrir: "apurar-cupons-evento"}
+      - {se: "tem integração de dados", abrir: "§3.2"}
+    complementar: [projetar-receita-evento]
+    orcamento: 6
+    arquivos:
+      - skills/acompanhar-metas-evento.md.tpl
+
+  - id: ANALISAR.ciclo-evento
+    nome: "Ciclo do evento — diagnóstico"
+    condicao: "oferta:evento or canal:eventos"
+    sinais: ["por que o lote vendeu mal", "o que puxou a venda do evento", "pós-mortem da edição", "comparar edições", "qual canal trouxe ingresso", "efeito da virada de lote", "timing das vendas"]
+    obrigatorio: [produtor-evento, analisar-ciclo-evento, ficha-edicao]
+    condicional:
+      - {se: "cupom, parceiro ou colaborador entram na conta", abrir: "apurar-cupons-evento"}
+      - {se: "o diagnóstico vira plano da próxima edição", abrir: "planejar-edicao-evento"}
+      - {se: "tem integração de dados", abrir: "§3.2"}
+    complementar: [acompanhar-metas-evento]
+    orcamento: 6
+    arquivos:
+      - skills/analisar-ciclo-evento.md.tpl
+
+  - id: ANALISAR.cupons-evento
+    nome: "Cupons e origens — apuração sem dupla contagem"
+    condicao: "oferta:evento or canal:eventos"
+    sinais: ["quantos ingressos saíram com cupom", "o cupom de colaborador se paga", "desconto efetivo", "cupom de parceiro", "venda de indicação", "canibalização do cupom", "penetração de cupom"]
+    obrigatorio: [produtor-evento, apurar-cupons-evento, ficha-edicao]
+    condicional:
+      - {se: "a apuração alimenta o acompanhamento", abrir: "acompanhar-metas-evento"}
+      - {se: "tem integração de dados", abrir: "§3.2"}
+    complementar: [analisar-ciclo-evento]
+    orcamento: 5
+    arquivos:
+      - skills/apurar-cupons-evento.md.tpl
+
+  - id: CRIAR.run-of-show
+    nome: "Run-of-show — roteiro do dia"
+    condicao: "oferta:evento or canal:eventos"
+    sinais: ["roteiro minuto a minuto", "run of show", "quem fala o quê no dia", "ordem do dia do evento", "roteiro de abertura e encerramento", "checklist técnico do dia", "credenciamento e palco"]
+    obrigatorio: [produtor-evento, run-of-show, ficha-edicao]
+    condicional:
+      - {se: "precisa das falas por extenso", abrir: "§3.7 iniciativa + o agente redator do pack marketing, se instalado"}
+      - {se: "speaker é voz pessoal da organização", abrir: "§3.3"}
+      - {se: "o dia tem deck de abertura", abrir: "deck-do-dia"}
+    complementar: [curadoria-speakers]
+    orcamento: 5
+    arquivos:
+      - skills/run-of-show.md.tpl
+
+  - id: CRIAR.pos-evento
+    nome: "Pós-evento — reaproveitamento e peças"
+    condicao: "oferta:evento or canal:eventos"
+    sinais: ["o que fazer com o conteúdo do evento", "cortes das palestras", "case do evento", "e-mail de agradecimento", "artigo a partir da palestra", "lista de peças pós-evento", "pesquisa de satisfação"]
+    obrigatorio: [produtor-evento, conteudo-pos-evento, regras-comunicacao-evento]
+    condicional:
+      - {se: "a peça é de um canal", abrir: "§3.7 iniciativa + a sub-skill do canal no pack marketing"}
+      - {se: "tem patrocinador", abrir: "captar-patrocinio"}
+      - {se: "vai usar depoimento ou número do evento", abrir: "kit-comunicacao-evento"}
+    complementar: [ficha-edicao]
+    orcamento: 5
+    arquivos:
+      - skills/conteudo-pos-evento.md.tpl
+
+  - id: CRIAR.deck-do-dia
+    nome: "Deck do dia — abertura e encerramento"
+    condicao: "oferta:evento or canal:eventos"
+    sinais: ["deck de abertura do evento", "apresentação do dia", "slides de programação", "intercalar material dos palestrantes", "slide de encerramento com CTA", "logos de patrocinador no deck"]
+    obrigatorio: [produtor-evento, deck-do-dia, ficha-edicao]
+    condicional:
+      - {se: "a arte final é com o time de design", abrir: "§3.7 iniciativa + o agente designer do pack marketing, se instalado"}
+      - {se: "tem patrocinador", abrir: "captar-patrocinio"}
+      - {se: "a ordem do dia ainda não existe", abrir: "run-of-show"}
+    complementar: [regras-comunicacao-evento]
+    orcamento: 5
+    arquivos:
+      - skills/deck-do-dia.md.tpl
+
+  - id: DOCUMENTAR.ficha-edicao
+    nome: "Ficha da edição e pasta da iniciativa"
+    condicao: "oferta:evento or canal:eventos"
+    sinais: ["abrir a edição deste ano", "criar a pasta da edição", "preencher a ficha da edição", "atualizar lote na ficha", "registrar patrocinador na ficha", "o que vai no iniciativa.yaml do evento"]
+    obrigatorio: [produtor-evento, ficha-edicao, modelo-iniciativa-evento]
+    condicional:
+      - {se: "a mudança é de regra de comunicação", abrir: "regras-comunicacao-evento"}
+      - {se: "a ficha nasce do plano da edição", abrir: "planejar-edicao-evento"}
+    complementar: [documentador]
+    orcamento: 4
+    arquivos: []

@@ -1,0 +1,26 @@
+# Distribuição agnóstica do Cortex — só kernel, packs, templates, CLI e onboarding.
+# Instâncias (config, contexto, times, gerados) nunca entram aqui.
+/cortex.config.yaml
+/contexto/
+/times/
+/iniciativas/
+/briefings/
+/_saida/
+/_assets/
+/_arquivo/
+/AGENTS.md
+/CLAUDE.md
+/ROTAS.md
+/CATALOGO.md
+/ABERTURA-SESSAO.md
+# .claude/ entra só com settings, hooks e as 4 skills cortex-*; wrappers e agentes são gerados na instância
+/.claude/agents/
+/.claude/skills/*
+!/.claude/skills/cortex-*/
+/.claude/settings.local.json
+/.env
+_cortex/.build/
+__pycache__/
+*.pyc
+.DS_Store
+Icon?

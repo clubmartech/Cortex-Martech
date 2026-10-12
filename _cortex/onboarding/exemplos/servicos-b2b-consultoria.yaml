@@ -1,0 +1,144 @@
+# Cenário C — consultoria B2B de serviços (sem produto de software, venda consultiva, HubSpot + Slack + Jira)
+# Prova que o Cortex se adapta a outro segmento e a outras ferramentas: ofertas do tipo serviço,
+# CRM como fonte de dado, Jira como registro, vendas e dados sugeridos, sem e-commerce nem social de massa.
+# Uso: python3 _cortex/cli/cortex.py init --answers _cortex/onboarding/exemplos/servicos-b2b-consultoria.yaml
+
+meta:
+  schema_version: 1
+  cortex_version: "0.1.0"
+  criado_em: "2026-10-03"
+  onboarding:
+    status: complete
+    blocos_concluidos: [B0, B1, B2, B3, B4, B5, B6, B7, B8, B9, B10]
+    assumidos: [B5.4]
+
+sessao:
+  idioma: pt-BR
+  ambiente: [claude-code, codex]
+  gate: declarativo+hook
+  papel_configurador: socio-diretor
+
+organizacao:
+  nome: "Prisma Consultoria"
+  slug: prisma
+  segmento: servicos-consultoria-financeira
+  modelo_comercial: B2B
+  porte: medio
+  descricao: "Consultoria de gestão financeira e reestruturação para empresas de médio porte."
+
+marcas:
+  - slug: prisma
+    nome: "Prisma"
+    genero: f
+    mae: true
+    tom: [analitica, serena, direta]
+    termos_proibidos: ["garantimos resultado", "milagre", "sem risco"]
+    termos_preferidos: {"cliente": "empresa atendida", "pacote": "frente de trabalho"}
+    site: "https://exemplo.com.br"
+
+produtos:
+  - slug: diagnostico-financeiro
+    nome: "Diagnóstico Financeiro"
+    tipo: servico
+    marca: prisma
+    publicos: [cfo, ceo-pme]
+    dor_principal: "Caixa aperta sem que a diretoria saiba onde a margem some."
+    promessa: "Em seis semanas, um mapa de onde a margem vaza e o que fazer primeiro."
+    modulos: []
+  - slug: reestruturacao
+    nome: "Reestruturação Financeira"
+    tipo: servico
+    marca: prisma
+    publicos: [ceo-pme, conselho]
+    dor_principal: "Dívida cara e negociação com bancos travada."
+    promessa: "Plano de reestruturação negociado e acompanhado até a execução."
+    modulos: [renegociacao-de-dividas, plano-de-caixa, governanca]
+  - slug: guia-do-cfo
+    nome: "Guia do CFO"
+    tipo: conteudo
+    marca: prisma
+    publicos: [cfo]
+    dor_principal: "Falta referência prática para decisões financeiras do dia a dia."
+    promessa: "Conteúdo mensal aplicável na segunda-feira."
+    modulos: []
+
+publicos:
+  - slug: cfo
+    nome: "CFO ou diretor financeiro de empresa média"
+    tipo: comprador
+    dor: "Responde ao conselho sem visibilidade de margem por linha de negócio."
+    objecao: "Consultoria custa caro e entrega relatório que ninguém executa."
+    territorio: ""
+  - slug: ceo-pme
+    nome: "CEO de empresa média"
+    tipo: comprador
+    dor: "Cresce em receita e não em caixa."
+    objecao: "Já tenho contador e controller."
+    territorio: ""
+  - slug: conselho
+    nome: "Conselho ou sócios"
+    tipo: influenciador
+    dor: "Precisa de um plano crível para aprovar."
+    objecao: "Quer ver casos parecidos antes."
+    territorio: ""
+  - slug: parceiro-contabil
+    nome: "Escritório contábil parceiro"
+    tipo: parceiro
+    dor: "Clientes pedem ajuda que vai além da contabilidade."
+    objecao: "Medo de perder o cliente para a consultoria."
+    territorio: ""
+
+canais:
+  - {slug: linkedin, prioridade: 1, revisao_anti_ia: obrigatoria}
+  - {slug: email, prioridade: 2, revisao_anti_ia: oferecida}
+  - {slug: newsletter, prioridade: 3, revisao_anti_ia: obrigatoria}
+  - {slug: eventos, prioridade: 4, revisao_anti_ia: oferecida}
+  - {slug: landing-page, prioridade: 5, revisao_anti_ia: oferecida}
+
+vozes:
+  - {slug: socio-diretor, papel: "Sócio-diretor", doc: contexto/vozes/socio-diretor.md}
+
+integracoes:
+  - {slug: jira, nome: "Jira", tipo: registro, registro_primario: true, somente_leitura: false, mcp: true}
+  - {slug: hubspot, nome: "HubSpot", tipo: crm, registro_primario: false, somente_leitura: false, mcp: true}
+  - {slug: ga4, nome: "Google Analytics", tipo: analytics, registro_primario: false, somente_leitura: true, mcp: false}
+  - {slug: slack, nome: "Slack", tipo: chat, registro_primario: false, somente_leitura: false, mcp: true}
+  - {slug: figma, nome: "Figma", tipo: design, registro_primario: false, somente_leitura: false, mcp: false}
+
+times:
+  - slug: crescimento
+    nome: "Marketing e vendas"
+    pack: marketing
+    papeis: [socio-diretor, marketing, executivo, sdr]
+
+papeis:
+  - {slug: socio-diretor, nome: "Sócio-diretor", time: crescimento, responsabilidades: [ratifica-kernel, ratifica-skills, revisa-externo]}
+  - {slug: marketing, nome: "Analista de marketing", time: crescimento, responsabilidades: [mantem-base, opera-registro]}
+  - {slug: executivo, nome: "Executivo de contas", time: crescimento, responsabilidades: [revisa-dados]}
+  - {slug: sdr, nome: "Pré-vendas", time: crescimento, responsabilidades: []}
+
+operacao:
+  ciclo_planejamento: mensal
+  destino_material_gerado: registro
+  fluxo_chat_antes_do_arquivo: true
+  criar_arquivo_sem_pedido: false
+  revisao_anti_ia_padrao: oferecida
+
+governanca:
+  comite: false
+  ratificador: socio-diretor
+  auditoria: {periodicidade: quinzenal, quando: "segunda e terça alternadas"}
+  git: true
+  telemetria: {ativa: false, destino_env: ""}
+  dados_proibidos_em_prompt: [dados-de-cliente, contratos, financeiro-da-empresa, credenciais, dados-pessoais]
+  limites: {aviso_kb: 35, erro_kb: 60, binario_mb: 2}
+
+packs:
+  - id: marketing
+    versao: "1.0"
+    instalado_em: times/crescimento
+    subfamilias_ativas: []
+
+rotas:
+  familias_inativas: []
+  orcamento_padrao: 5

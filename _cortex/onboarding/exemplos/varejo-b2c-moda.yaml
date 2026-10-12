@@ -1,0 +1,132 @@
+# Cenário B — varejo B2C de moda (marca única, coleções, loja online + física)
+# Serve para provar que o Cortex muda de forma com o contexto: sem ABM, sem dado estruturado,
+# brandcenter simples, Notion como registro, revisão anti-IA obrigatória em social.
+# Uso: python3 _cortex/cli/cortex.py init --answers _cortex/onboarding/exemplos/varejo-b2c-moda.yaml
+
+meta:
+  schema_version: 1
+  cortex_version: "0.1.0"
+  criado_em: "2026-10-03"
+  onboarding:
+    status: complete
+    blocos_concluidos: [B0, B1, B2, B3, B4, B5, B6, B7, B8, B9, B10]
+    assumidos: [B4.territorios, B6.dados, B9.auditoria]
+
+sessao:
+  idioma: pt-BR
+  ambiente: [claude-code]
+  gate: declarativo+hook
+  papel_configurador: lider-marca
+
+organizacao:
+  nome: Lume Moda
+  slug: lume
+  segmento: varejo-moda
+  modelo_comercial: B2C
+  porte: pequeno
+  descricao: Marca de moda feminina com e-commerce próprio e duas lojas físicas.
+
+marcas:
+  - slug: lume
+    nome: Lume
+    genero: f
+    mae: true
+    tom: [leve, afetiva, confiante]
+    termos_proibidos: [imperdível, corra, últimas unidades]
+    termos_preferidos: {cliente: você, promoção: oferta da semana}
+    site: "https://exemplo.com.br"
+
+produtos:
+  - slug: colecao-verao
+    nome: Coleção Verão
+    tipo: produto
+    marca: lume
+    publicos: [mulher-30-45]
+    dor_principal: Quer roupa que funcione no trabalho e no fim de semana sem parecer esforço.
+    promessa: Peças que resolvem a semana inteira.
+    modulos: []
+  - slug: linha-basicos
+    nome: Linha Básicos
+    tipo: produto
+    marca: lume
+    publicos: [mulher-30-45, mulher-20-30]
+    dor_principal: Básico bom é caro ou dura pouco.
+    promessa: Básico que dura e combina com tudo.
+    modulos: []
+  - slug: clube-lume
+    nome: Clube Lume
+    tipo: servico
+    marca: lume
+    publicos: [mulher-30-45]
+    dor_principal: Compra sempre na mesma loja e não ganha nada por isso.
+    promessa: Vantagens para quem já é de casa.
+    modulos: []
+
+publicos:
+  - {slug: mulher-30-45, nome: "Mulher 30–45, trabalha fora, compra online", tipo: comprador, dor: "Pouco tempo para escolher; cansou de devolver.", objecao: Não sei se o tamanho vai servir., territorio: ""}
+  - {slug: mulher-20-30, nome: "Mulher 20–30, descobre marca pelo Instagram e TikTok", tipo: comprador, dor: Quer estilo sem gastar muito., objecao: Frete e prazo., territorio: ""}
+
+canais:
+  - {slug: instagram, prioridade: 1, revisao_anti_ia: obrigatoria}
+  - {slug: tiktok, prioridade: 2, revisao_anti_ia: obrigatoria}
+  - {slug: whatsapp, prioridade: 3, revisao_anti_ia: oferecida}
+  - {slug: email, prioridade: 4, revisao_anti_ia: oferecida}
+  - {slug: midia-paga, prioridade: 5, revisao_anti_ia: oferecida}
+  - {slug: loja-fisica, prioridade: 6, revisao_anti_ia: oferecida}
+vozes: []
+
+integracoes:
+  - {slug: notion, nome: Notion, tipo: registro, registro_primario: true, somente_leitura: false, mcp: true}
+  - {slug: shopify, nome: Shopify, tipo: outro, registro_primario: false, somente_leitura: true, mcp: false}
+  - {slug: meta-business, nome: Meta Business Suite, tipo: automacao-mkt, registro_primario: false, somente_leitura: false, mcp: false}
+  - {slug: canva, nome: Canva, tipo: design, registro_primario: false, somente_leitura: false, mcp: false}
+
+times:
+  - slug: marca
+    nome: Marca e conteúdo
+    pack: marketing
+    papeis: [lider-marca, social, atendimento]
+  - slug: atendimento
+    nome: Atendimento
+    pack: ""
+    papeis: [atendimento]
+
+papeis:
+  - slug: lider-marca
+    nome: Líder de marca (dona da loja)
+    time: marca
+    responsabilidades: [ratifica-kernel, ratifica-skills, revisa-externo, mantem-base, opera-registro]
+  - slug: social
+    nome: Social media
+    time: marca
+    responsabilidades: []
+  - slug: atendimento
+    nome: Atendimento e WhatsApp
+    time: marca
+    responsabilidades: []
+
+operacao:
+  ciclo_planejamento: mensal
+  destino_material_gerado: registro
+  fluxo_chat_antes_do_arquivo: true
+  criar_arquivo_sem_pedido: false
+  revisao_anti_ia_padrao: obrigatoria
+
+governanca:
+  comite: false
+  ratificador: lider-marca
+  auditoria: {periodicidade: mensal, quando: primeira segunda do mês}
+  git: false
+  telemetria: {ativa: false, destino_env: ""}
+  dados_proibidos_em_prompt: [dados-de-cliente, credenciais, financeiro-da-empresa]
+  limites: {aviso_kb: 35, erro_kb: 60, binario_mb: 2}
+
+packs:
+  - id: marketing
+    versao: "1.0"
+    instalado_em: times/marca
+    subfamilias_ativas: []
+
+rotas:
+  familias_inativas: []
+  orcamento_padrao: 5

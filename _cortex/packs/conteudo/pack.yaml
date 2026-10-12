@@ -1,0 +1,92 @@
+id: conteudo
+nome: "Conteúdo editorial"
+versao: "1.0"
+descricao: "Produção editorial própria — artigo, verbete de glossário, notícia, material de aula e ferramenta web — com um editor que decide formato antes do texto."
+requer_config: [marcas, canais]
+sugerir_se: "canal:blog or canal:seo"
+time_padrao: conteudo
+
+# Instanciados sempre que o pack é instalado.
+arquivos_base:
+  - agents/editor.agent.md.tpl
+  - docs/linha-editorial.md.tpl
+  - docs/formatos-editoriais.md.tpl
+
+subfamilias:
+  - id: CRIAR.artigo
+    nome: "Artigo"
+    condicao: "canal:blog"
+    sinais: ["artigo", "post do blog", "texto evergreen", "pauta do blog", "guia completo sobre", "atualizar um artigo antigo"]
+    obrigatorio: [editor, artigo]
+    condicional:
+      - {se: "produto nomeado", abrir: "§3.1"}
+      - {se: "assinado por pessoa", abrir: "§3.3"}
+      - {se: "precisa de imagem de destaque", abrir: "§CRIAR.arte do pack marketing, se instalado"}
+    complementar: [linha-editorial, formatos-editoriais]
+    orcamento: 5
+    arquivos:
+      - skills/artigo.md.tpl
+
+  - id: CRIAR.verbete
+    nome: "Verbete de glossário"
+    condicao: "canal:seo or canal:blog"
+    sinais: ["verbete", "glossário", "o que é X como página", "definição para o glossário", "termo do glossário", "significado de"]
+    obrigatorio: [editor, verbete]
+    condicional:
+      - {se: "o termo aparece no produto", abrir: "§3.1"}
+    complementar: [linha-editorial, formatos-editoriais]
+    orcamento: 4
+    arquivos:
+      - skills/verbete.md.tpl
+
+  - id: CRIAR.noticia
+    nome: "Notícia"
+    condicao: "canal:blog"
+    sinais: ["notícia", "pauta do dia", "novidade do mercado", "cobrir o anúncio de", "nota sobre o lançamento de", "notícias da semana para o site"]
+    obrigatorio: [editor, noticia]
+    condicional:
+      - {se: "fonte externa única", abrir: "§3 de anti-alucinacao.md (o que nunca afirmar sem verificar)"}
+    complementar: [linha-editorial, formatos-editoriais]
+    orcamento: 4
+    arquivos:
+      - skills/noticia.md.tpl
+
+  - id: CRIAR.aula
+    nome: "Material de aula"
+    condicao: "oferta:produto"
+    sinais: ["roteiro de aula", "material didático", "descrição da aula", "exercício para a aula", "plano de aula", "resumo da aula para o aluno"]
+    obrigatorio: [editor, aula]
+    condicional:
+      - {se: "a aula pertence a um módulo da oferta", abrir: "§3.1 (doc-raiz da oferta, seção do módulo)"}
+      - {se: "assinado por pessoa", abrir: "§3.3"}
+    complementar: [linha-editorial, formatos-editoriais]
+    orcamento: 5
+    arquivos:
+      - skills/aula.md.tpl
+
+  - id: CRIAR.ferramenta-web
+    nome: "Ferramenta web"
+    condicao: "canal:seo"
+    sinais: ["ferramenta interativa", "calculadora para o site", "gerador para o site", "página utilitária", "validador online", "ferramenta HTML"]
+    obrigatorio: [editor, ferramenta-web]
+    condicional:
+      - {se: "a ferramenta coleta dado de quem usa", abrir: "§3 de governanca.md (dados proibidos em prompt)"}
+      - {se: "tem integração de analytics", abrir: "§3.2"}
+    complementar: [formatos-editoriais]
+    orcamento: 4
+    arquivos:
+      - skills/ferramenta-web.md.tpl
+
+  - id: PLANEJAR.editorial
+    nome: "Calendário e cobertura editorial"
+    condicao: "canal:blog or canal:seo"
+    sinais: ["calendário editorial", "cobertura de tema", "lacuna de conteúdo", "cluster de conteúdo", "o que publicar este mês", "pautas do trimestre"]
+    obrigatorio: [editor, planejar-editorial]
+    condicional:
+      - {se: "produto nomeado", abrir: "§3.1"}
+      - {se: "tem integração de analytics", abrir: "§3.2"}
+      - {se: "o plano vira campanha", abrir: "§PLANEJAR.campanha do pack marketing, se instalado"}
+    complementar: [linha-editorial, formatos-editoriais]
+    orcamento: 6
+    arquivos:
+      - skills/planejar-editorial.md.tpl

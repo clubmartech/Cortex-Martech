@@ -1,0 +1,222 @@
+# Cenário A — SaaS B2B para a indústria da construção
+# Cenário fictício de um ecossistema SaaS de construção (marcas, produtos, canais e times),
+# sem dados sensíveis (preços, métricas, pessoas, ids de sistemas).
+# Uso: python3 _cortex/cli/cortex.py init --answers _cortex/onboarding/exemplos/saas-b2b-construcao.yaml
+
+meta:
+  schema_version: 1
+  cortex_version: "0.1.0"
+  criado_em: "2026-10-03"
+  onboarding:
+    status: complete
+    blocos_concluidos: [B0, B1, B2, B3, B4, B5, B6, B7, B8, B9, B10]
+    assumidos: []
+
+sessao:
+  idioma: pt-BR
+  ambiente: [claude-code, cowork]
+  gate: declarativo+hook
+  papel_configurador: mkt-ops
+
+organizacao:
+  nome: Ecossistema Construtech
+  slug: construtech
+  segmento: saas-b2b-construcao
+  modelo_comercial: B2B
+  porte: grande
+  descricao: "Plataforma de gestão para construtoras e incorporadoras: ERP, planejamento de obra, compras e crédito."
+
+marcas:
+  - slug: construtech
+    nome: Construtech
+    genero: m
+    mae: true
+    tom: [tecnico, direto, proximo-do-canteiro]
+    termos_proibidos: [solução completa, revolucionário, o melhor do mercado]
+    termos_preferidos: {software: plataforma, cliente: construtora}
+    site: "https://exemplo.com.br"
+  - slug: holding
+    nome: Holding
+    genero: f
+    mae: false
+    tom: [institucional, confiante, sobria]
+    termos_proibidos: []
+    termos_preferidos: {}
+
+produtos:
+  - slug: erp-obras
+    nome: ERP Obras
+    tipo: produto
+    marca: construtech
+    publicos: [diretor-financeiro, gestor-obras]
+    dor_principal: Custo da obra estoura sem que ninguém veja a tempo.
+    promessa: "Visibilidade de custo e caixa por obra, em tempo real."
+    modulos: [orcamento, suprimentos, financeiro, fiscal]
+  - slug: planejamento-obra
+    nome: Planejamento de Obra
+    tipo: produto
+    marca: construtech
+    publicos: [gestor-obras, engenheiro-planejamento]
+    dor_principal: Cronograma vira ficção depois da segunda semana.
+    promessa: Planejamento que o canteiro consegue seguir.
+    modulos: [cronograma, gantt, curva-s]
+  - slug: credito-construcao
+    nome: Crédito Construção
+    tipo: servico
+    marca: construtech
+    publicos: [diretor-financeiro]
+    dor_principal: Capital de giro travado entre a medição e o recebimento.
+    promessa: Antecipação de recebíveis integrada ao ERP.
+    modulos: []
+  - slug: summit-construcao
+    nome: Summit da Construção
+    tipo: evento
+    marca: construtech
+    publicos: [diretor-financeiro, gestor-obras]
+    dor_principal: ""
+    promessa: Dois dias com quem decide a obra no Brasil.
+    modulos: []
+
+publicos:
+  - {slug: diretor-financeiro, nome: Diretor financeiro de construtora, tipo: comprador, dor: Não enxerga margem por obra até fechar o mês., objecao: "Já tenho planilha e ERP genérico; trocar é caro.", territorio: construtora}
+  - {slug: gestor-obras, nome: Gestor de obras, tipo: usuario, dor: Passa o dia apagando incêndio e preenchendo relatório., objecao: Sistema bonito que ninguém no canteiro usa., territorio: construtora}
+  - {slug: engenheiro-planejamento, nome: Engenheiro de planejamento, tipo: influenciador, dor: Replaneja toda semana porque o dado chega atrasado., objecao: "Ferramenta nova = mais um lugar para digitar.", territorio: construtora}
+  - {slug: fornecedor-construcao, nome: Fornecedor de material e serviço, tipo: parceiro, dor: Vende para a obra sem saber quando vai receber., objecao: Marketplace cobra comissão e não traz volume., territorio: fornecedor}
+
+canais:
+  - {slug: email, prioridade: 1, revisao_anti_ia: oferecida}
+  - {slug: linkedin, prioridade: 2, revisao_anti_ia: obrigatoria}
+  - {slug: instagram, prioridade: 3, revisao_anti_ia: obrigatoria}
+  - {slug: landing-page, prioridade: 4, revisao_anti_ia: oferecida}
+  - {slug: midia-paga, prioridade: 5, revisao_anti_ia: oferecida}
+  - {slug: youtube, prioridade: 6, revisao_anti_ia: oferecida}
+  - {slug: whatsapp, prioridade: 7, revisao_anti_ia: oferecida}
+  - {slug: newsletter, prioridade: 8, revisao_anti_ia: obrigatoria}
+  - {slug: eventos, prioridade: 9, revisao_anti_ia: oferecida}
+  - {slug: comunidade, prioridade: 10, revisao_anti_ia: obrigatoria}
+
+vozes:
+  - {slug: ceo, papel: CEO da marca-mãe, doc: contexto/vozes/ceo.md}
+
+integracoes:
+  - {slug: clickup, nome: ClickUp, tipo: registro, registro_primario: true, somente_leitura: false, mcp: true}
+  - {slug: supabase, nome: Supabase (funil de marketing), tipo: dados, registro_primario: false, somente_leitura: true, mcp: true}
+  - {slug: rd-station, nome: RD Station Marketing, tipo: automacao-mkt, registro_primario: false, somente_leitura: false, mcp: true}
+  - {slug: n8n, nome: n8n, tipo: automacao, registro_primario: false, somente_leitura: false, mcp: false}
+  - {slug: canva, nome: Canva, tipo: design, registro_primario: false, somente_leitura: false, mcp: false}
+  - {slug: teams, nome: Microsoft Teams, tipo: chat, registro_primario: false, somente_leitura: false, mcp: false}
+  - {slug: git, nome: Git, tipo: repositorio, registro_primario: false, somente_leitura: false, mcp: false}
+
+times:
+  - slug: marketing
+    nome: Marketing
+    pack: marketing
+    papeis: [mkt-ops, redator, designer, estrategista, analista, editorial, eventos]
+  - slug: produto
+    nome: Produto
+    pack: ""
+    papeis: [pm, product-marketer]
+  - slug: vendas
+    nome: Vendas
+    pack: ""
+    papeis: [lider-vendas, sdr, executivo]
+  - slug: cs
+    nome: Customer Success
+    pack: ""
+    papeis: [cs, atendimento]
+  - slug: dados
+    nome: Dados
+    pack: ""
+    papeis: [analista-dados]
+
+papeis:
+  - slug: mkt-ops
+    nome: Marketing Ops (governança do processo)
+    time: marketing
+    responsabilidades: [ratifica-skills, mantem-base, opera-registro]
+  - slug: redator
+    nome: Redator
+    time: marketing
+    responsabilidades: [revisa-externo]
+  - slug: designer
+    nome: Designer
+    time: marketing
+    responsabilidades: []
+  - slug: estrategista
+    nome: Estrategista de demanda
+    time: marketing
+    responsabilidades: [revisa-externo]
+  - slug: analista
+    nome: Analista de growth
+    time: marketing
+    responsabilidades: [revisa-dados]
+  - slug: editorial
+    nome: Editorial e conteúdo
+    time: marketing
+    responsabilidades: [revisa-externo]
+  - slug: pm
+    nome: Product manager
+    time: produto
+    responsabilidades: []
+  - slug: comite-ia
+    nome: Comitê de IA
+    time: ""
+    responsabilidades: [ratifica-kernel, ratifica-skills]
+  - slug: eventos
+    nome: Produtor de eventos
+    time: marketing
+    responsabilidades: [revisa-externo]
+  - slug: product-marketer
+    nome: Product marketer
+    time: produto
+    responsabilidades: [revisa-externo]
+  - slug: lider-vendas
+    nome: Líder de vendas
+    time: vendas
+    responsabilidades: [revisa-externo, revisa-dados]
+  - slug: sdr
+    nome: SDR / pré-vendas
+    time: vendas
+    responsabilidades: []
+  - slug: executivo
+    nome: Executivo de contas
+    time: vendas
+    responsabilidades: []
+  - slug: cs
+    nome: Gestor de sucesso do cliente
+    time: cs
+    responsabilidades: [revisa-externo]
+  - slug: atendimento
+    nome: Atendimento e suporte
+    time: cs
+    responsabilidades: []
+  - slug: analista-dados
+    nome: Analista de dados
+    time: dados
+    responsabilidades: [revisa-dados]
+
+operacao:
+  ciclo_planejamento: trimestral
+  destino_material_gerado: registro
+  fluxo_chat_antes_do_arquivo: true
+  criar_arquivo_sem_pedido: false
+  revisao_anti_ia_padrao: oferecida
+
+governanca:
+  comite: true
+  ratificador: comite-ia
+  auditoria: {periodicidade: semanal, quando: "segunda 08:15"}
+  git: true
+  telemetria: {ativa: true, destino_env: CORTEX_TELEMETRY_URL}
+  dados_proibidos_em_prompt: [preco-de-produto, dados-de-cliente, metricas-internas, financeiro-da-empresa, credenciais]
+  limites: {aviso_kb: 35, erro_kb: 60, binario_mb: 2}
+
+packs:
+  - id: marketing
+    versao: "1.0"
+    instalado_em: times/marketing
+    subfamilias_ativas: []
+
+rotas:
+  familias_inativas: []
+  orcamento_padrao: 5
