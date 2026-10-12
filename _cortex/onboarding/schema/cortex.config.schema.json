@@ -690,6 +690,82 @@
           "description": "raiz do projeto que hospeda o Cortex, relativa à raiz do Cortex; opt-in para ponteiros fora da raiz do Cortex"
         }
       }
+    },
+    "visual": {
+      "type": "object",
+      "description": "pack visual: nicho e preferências para radar, acervo, design system e direções (bloco B11)",
+      "properties": {
+        "nicho": {
+          "type": "string"
+        },
+        "termos_nicho": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "publico_visual": {
+          "type": "string"
+        },
+        "pessoas_reais": {
+          "type": "boolean"
+        },
+        "formatos": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "executores": {
+          "type": "object",
+          "properties": {
+            "imagem": {
+              "type": "string"
+            },
+            "video": {
+              "type": "string"
+            },
+            "design": {
+              "type": "string"
+            }
+          }
+        },
+        "fontes_proprias": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "url"
+            ],
+            "properties": {
+              "url": {
+                "type": "string"
+              },
+              "nome": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              },
+              "tipo": {
+                "type": "string"
+              },
+              "acesso": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "fontes_vetadas": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "cotas": {
+          "type": "object"
+        }
+      }
     }
   }
 }

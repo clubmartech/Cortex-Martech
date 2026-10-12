@@ -5,7 +5,7 @@
 
 meta:
   schema_version: 1
-  cortex_version: "0.3.0"
+  cortex_version: "0.4.0"
   criado_em: "2026-10-03"
   onboarding:
     status: complete

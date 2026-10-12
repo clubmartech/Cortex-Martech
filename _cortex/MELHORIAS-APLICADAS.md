@@ -76,3 +76,19 @@ Primeira versão publicada fora de uma instância. Junta o núcleo 0.2.0-local.2
 | Testes dependiam do config da instância | caem no exemplo de onboarding quando não há config | `cli/tests/test_interfaces.py` |
 
 Verificação: 25 testes; instalação limpa + `init` com os três exemplos de onboarding + `build` idempotente + `doctor` sem erro; hooks testados por stdin.
+
+## 2026-10-12 — 0.4.0, pack visual
+
+Pack `visual` com três agentes (curador visual, diretor de arte, arquiteto de conteúdo), onze skills e sete docs-base, desenhado a partir do processo de referência que uma instância já praticava (coleta a pedido, procedência, leitura com limites, destilação em estilos próprios, uso com régua de sinais de IA) e das regras dela (inspirar sem copiar, a marca vence, licença primeiro).
+
+| Problema | Alteração | Onde |
+|---|---|---|
+| O Cortex organizava texto, mas não referência visual, acervo, design system nem direção de foto e vídeo | pack `visual` + orquestrador `/kit-visual` com aprovação humana nas etapas que decidem a marca | `packs/visual/` |
+| Busca de referência genérica, sem nicho nem procedência | registro de fontes (própria → nicho → sugerida), plano por nicho, triagem com seis critérios, licença, limite por autor, cotas e saturação | `packs/visual/scripts/radar.py`, `docs/fontes-de-referencia.md.tpl` |
+| Acervo sem licença ou com mídia de terceiro misturada | manifesto com licença, origem e sha256; recusa NC/ND/SA/desconhecida; CC BY exige crédito; galeria HTML filtrável | `scripts/acervo.py` |
+| Valores de marca espalhados e contraste não conferido | tokens DTCG com aliases, temas, contraste WCAG, exportação CSS e página-amostra | `scripts/tokens.py` |
+| Peças fora da paleta e da tipografia | auditoria de HTML, CSS e SVG contra os tokens | `scripts/consistencia.py` |
+| Nada verificava o sistema visual | check 15 do doctor (só com o pack instalado) | `cli/lib/checks.py::check_visual` |
+| Onboarding sem perguntas visuais | bloco B11 e bloco `visual` no schema | `onboarding/questionario.md`, schema |
+
+Verificação: 42 testes; instalação limpa com o pack, build e doctor sem erro; fluxo radar → triagem → acervo → tokens → consistência exercitado; galeria executada em DOM simulado. O pack não gera arte: as skills de produção continuam por conta dos executores de cada instância.

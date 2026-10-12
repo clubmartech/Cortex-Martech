@@ -395,7 +395,7 @@ def main(argv=None):
     ck.add_argument("--json", action="store_true")
     ck.set_defaults(fn=cmd_checkup)
 
-    d = sub.add_parser("doctor", help="auditoria da base (14 checks)")
+    d = sub.add_parser("doctor", help="auditoria da base (15 checks; o 15 só com o pack visual)")
     d.add_argument("--quick", action="store_true", help="só checks 1, 2, 4 e 9 (≤1 s)")
     d.add_argument("--fix", action="store_true", help="aplica as correções automáticas disponíveis")
     d.add_argument("--json", action="store_true")

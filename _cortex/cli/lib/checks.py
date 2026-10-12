@@ -672,6 +672,57 @@ def check_nomenclatura(root, docs):
     return ach
 
 
+# ---------------------------------------------------------------- 15 visual
+
+def _modulo_visual(root, nome):
+    """Carrega um script do pack visual (só quando o pack está instalado)."""
+    import importlib.util
+    import sys as _sys
+    pasta = Path(root) / "_cortex" / "packs" / "visual" / "scripts"
+    if str(pasta) not in _sys.path:
+        _sys.path.insert(0, str(pasta))
+    spec = importlib.util.spec_from_file_location("visual_" + nome, pasta / (nome + ".py"))
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def check_visual(root, cfg):
+    """Pack visual instalado: tokens DTCG válidos e com contraste; acervo com licença e procedência."""
+    import json
+    pack = next((p for p in (cfg.get("packs") or []) if isinstance(p, dict) and p.get("id") == "visual"), None)
+    if not pack or not pack.get("instalado_em"):
+        return []
+    ach = []
+    docs = "%s/docs" % pack["instalado_em"].rstrip("/")
+    try:
+        tokens = _modulo_visual(root, "tokens")
+        acervo = _modulo_visual(root, "acervo")
+    except Exception as e:  # pack sem scripts: reinstale o kernel
+        return [Achado(ERRO, "_cortex/packs/visual/scripts/", "scripts do pack visual indisponíveis: %s" % e, None, 15)]
+    rel = docs + "/tokens.json"
+    texto = fs.ler(root, rel)
+    if texto is not None:
+        try:
+            erros, avisos = tokens.validar(json.loads(texto))
+        except ValueError as e:
+            erros, avisos = ["JSON inválido: %s" % e], []
+        ach += [Achado(ERRO, rel, "tokens: " + e, None, 15) for e in erros]
+        if avisos:
+            ach.append(Achado(AVISO, rel, "tokens: %d valor(es) a preencher (rode o kit-visual ou documentar-design-system)" % len(avisos), None, 15))
+    rel = docs + "/acervo.json"
+    texto = fs.ler(root, rel)
+    if texto is not None:
+        try:
+            man = json.loads(texto)
+            erros, avisos = acervo.validar(man, (Path(root) / docs), root)
+        except ValueError as e:
+            erros, avisos = ["JSON inválido: %s" % e], []
+        ach += [Achado(ERRO, rel, "acervo: " + e, None, 15) for e in erros]
+        ach += [Achado(AVISO, rel, "acervo: " + w, None, 15) for w in avisos]
+    return ach
+
+
 # ---------------------------------------------------------------- 12 duplicatas
 
 def check_duplicatas(docs):
@@ -746,9 +797,9 @@ def _fix_crlf(root, relp):
 
 def rodar(root, cfg, quais=None, caminhos=None, docs_extra=None, plano=None):
     """Roda os checks pedidos (todos por padrão). `caminhos` limita os checks por arquivo."""
-    quais = set(quais or range(1, 15))
+    quais = set(quais or range(1, 16))
     if caminhos:  # doctor <arquivo…> / lint: só os checks por arquivo
-        quais -= {1, 2, 6, 14}
+        quais -= {1, 2, 6, 14, 15}
     ach = []
     docs_todos = catalog.varrer(root)
     if docs_extra:
@@ -797,6 +848,8 @@ def rodar(root, cfg, quais=None, caminhos=None, docs_extra=None, plano=None):
         ach += check_duplicatas(docs_todos if not caminhos else docs)
     if 13 in quais:
         ach += check_encoding(root, docs)
+    if 15 in quais and cfg is not None:
+        ach += check_visual(root, cfg)
     if 14 in quais:
         try:
             registry = interfaces.carregar(root, cfg)

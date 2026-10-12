@@ -234,6 +234,7 @@ Inclui todo `.md` sob a raiz. Exclui: `_arquivo`, `_saida`, `_assets`, `.claude`
 | 12 | duplicatas | corpo idêntico (AVISO); `id` repetido (ERRO) | ERRO/AVISO |
 | 13 | encoding | BOM, CRLF (`--fix`), não-UTF-8 (ERRO), mojibake | ERRO/AVISO |
 | 14 | interfaces | manifesto, relações, fontes locais e índice derivado (só com o bloco `interfaces` ativo) | ERRO/AVISO |
+| 15 | visual | `tokens.json` DTCG válido e com contraste WCAG; `acervo.json` com licença, procedência e sem mídia de terceiro no escopo (só com o pack `visual`) | ERRO/AVISO |
 
 `--quick` roda 1, 2, 4 e 9. `lint --file` roda 3, 4, 5, 7, 9, 10, 11, 12 e 13 num arquivo só.
 

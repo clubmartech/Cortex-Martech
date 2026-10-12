@@ -1,0 +1,145 @@
+id: visual
+nome: "Visual — referências, acervo, design system e direção"
+versao: "1.0"
+descricao: "Busca referências do nicho nas fontes certas, destila num sistema visual próprio (DNA, estilos, design system, direção de foto, vídeo e imagem IA), organiza o acervo e liga cada formato de conteúdo ao seu estilo. Inspira sem copiar; a marca vence."
+requer_config: [marcas]
+sugerir_se: "canal:instagram or canal:youtube or canal:tiktok or canal:linkedin or canal:landing-page or time:design or tem:visual"
+time_padrao: marca
+
+# Scripts (stdlib) ficam no kernel e não são instanciados: `_cortex/packs/visual/scripts/`.
+# radar.py (plano e triagem) · acervo.py (manifesto e galeria) · tokens.py (DTCG, contraste, CSS, amostra)
+# · consistencia.py (peça × tokens). O check 15 do doctor os usa quando o pack está instalado.
+
+arquivos_base:
+  - agents/curador-visual.agent.md.tpl
+  - agents/diretor-de-arte.agent.md.tpl
+  - agents/arquiteto-de-conteudo.agent.md.tpl
+  - docs/fontes-de-referencia.md.tpl
+  - docs/design-system.md.tpl
+  - docs/tokens.json.tpl
+  - docs/acervo.json.tpl
+  - docs/estilos-visuais.md.tpl
+  - docs/direcao-fotografica.md.tpl
+  - docs/direcao-imagem-ia.md.tpl
+  - docs/mapa-de-conteudo.md.tpl
+  - skills/kit-visual.md.tpl
+
+subfamilias:
+  - id: PLANEJAR.kit-visual
+    nome: "Kit visual completo"
+    condicao: "sempre"
+    sinais: ["kit visual", "criar a identidade visual do zero", "montar o sistema visual da marca", "recriar a estética da marca", "do nicho ao design system", "onboarding visual"]
+    obrigatorio: [diretor-de-arte, kit-visual]
+    condicional:
+      - {se: "falta o bloco visual no config", abrir: "§B11 de questionario.md (onboarding visual)"}
+    complementar: [fontes-de-referencia, design-system]
+    orcamento: 6
+    arquivos:
+      - skills/kit-visual.md.tpl
+
+  - id: ANALISAR.referencias-visuais
+    nome: "Radar de referências"
+    condicao: "sempre"
+    sinais: ["buscar referências", "referências do nicho", "moodboard", "o que os melhores do nicho fazem", "inspiração visual para", "pesquisar estética"]
+    obrigatorio: [curador-visual, radar-de-referencias, fontes-de-referencia]
+    condicional:
+      - {se: "a fonte exige login ou API", abrir: "§3 de governanca.md (dados proibidos em prompt) e o cofre do projeto"}
+    complementar: [estilos-visuais]
+    orcamento: 5
+    arquivos:
+      - skills/radar-de-referencias.md.tpl
+
+  - id: ANALISAR.dna-visual
+    nome: "DNA visual de referências"
+    condicao: "sempre"
+    sinais: ["extrair o estilo dessa referência", "o que faz essa peça funcionar", "DNA visual", "engenharia reversa do visual", "analisa essa imagem de referência", "tokens dessa referência"]
+    obrigatorio: [diretor-de-arte, dna-visual]
+    condicional:
+      - {se: "referência de terceiros", abrir: "fontes-de-referencia"}
+    complementar: [estilos-visuais, design-system]
+    orcamento: 4
+    arquivos:
+      - skills/dna-visual.md.tpl
+
+  - id: OPERAR.acervo-visual
+    nome: "Acervo visual"
+    condicao: "sempre"
+    sinais: ["organizar o acervo", "galeria de referências", "catálogo de imagens", "acervo visual", "registrar licença da imagem", "onde estão as referências aprovadas"]
+    obrigatorio: [curador-visual, acervo-visual]
+    complementar: [fontes-de-referencia]
+    orcamento: 4
+    arquivos:
+      - skills/acervo-visual.md.tpl
+
+  - id: DOCUMENTAR.design-system
+    nome: "Design system"
+    condicao: "sempre"
+    sinais: ["design system", "tokens da marca", "paleta e tipografia", "documento de system design", "guia de componentes", "versão escura da marca"]
+    obrigatorio: [diretor-de-arte, documentar-design-system, design-system]
+    condicional:
+      - {se: "altera fundação da marca", abrir: "§4 de governanca.md (ratificação)"}
+    complementar: [estilos-visuais]
+    orcamento: 5
+    arquivos:
+      - skills/documentar-design-system.md.tpl
+
+  - id: DOCUMENTAR.estilos-visuais
+    nome: "Biblioteca de estilos"
+    condicao: "sempre"
+    sinais: ["biblioteca de estilos", "documento de estilo", "transformar referência em estilo próprio", "receita visual", "quais estilos a marca usa", "estilo para carrossel"]
+    obrigatorio: [diretor-de-arte, biblioteca-de-estilos, estilos-visuais]
+    complementar: [design-system]
+    orcamento: 4
+    arquivos:
+      - skills/biblioteca-de-estilos.md.tpl
+
+  - id: DOCUMENTAR.direcao-fotografica
+    nome: "Direção fotográfica"
+    condicao: "sempre"
+    sinais: ["direção de fotografia", "guia de fotos da marca", "como fotografar", "ensaio da marca", "luz e enquadramento", "shot list"]
+    obrigatorio: [diretor-de-arte, dirigir-fotografia, direcao-fotografica]
+    complementar: [design-system]
+    orcamento: 4
+    arquivos:
+      - skills/dirigir-fotografia.md.tpl
+
+  - id: DOCUMENTAR.direcao-de-video
+    nome: "Direção de vídeo"
+    condicao: "canal:youtube or canal:instagram or canal:tiktok or canal:linkedin"
+    sinais: ["estética dos vídeos", "padrão de vídeo da marca", "ritmo e cortes", "legenda e motion", "direção de vídeo", "como os reels devem parecer"]
+    obrigatorio: [diretor-de-arte, dirigir-video, direcao-de-video]
+    complementar: [design-system, estilos-visuais]
+    orcamento: 4
+    arquivos:
+      - skills/dirigir-video.md.tpl
+      - docs/direcao-de-video.md.tpl
+
+  - id: DOCUMENTAR.direcao-imagem-ia
+    nome: "Direção de imagem com IA"
+    condicao: "sempre"
+    sinais: ["prompt padrão de imagem", "imagem com IA na estética da marca", "consistência de personagem", "estilo de geração", "sinais de IA na imagem", "prompt-base"]
+    obrigatorio: [diretor-de-arte, dirigir-imagem-ia, direcao-imagem-ia]
+    complementar: [design-system, estilos-visuais]
+    orcamento: 4
+    arquivos:
+      - skills/dirigir-imagem-ia.md.tpl
+
+  - id: PLANEJAR.mapa-de-conteudo
+    nome: "Mapa de conteúdo"
+    condicao: "sempre"
+    sinais: ["mapa de conteúdo", "pilares de conteúdo", "o que falar para cada público", "matriz de formatos", "lacunas de conteúdo por etapa", "estratégia de formatos"]
+    obrigatorio: [arquiteto-de-conteudo, mapear-conteudo, mapa-de-conteudo]
+    complementar: [estilos-visuais]
+    orcamento: 5
+    arquivos:
+      - skills/mapear-conteudo.md.tpl
+
+  - id: REVISAR.consistencia-visual
+    nome: "Consistência visual"
+    condicao: "sempre"
+    sinais: ["essa peça está na marca", "conferir cores da peça", "auditar o lote visual", "fonte errada na arte", "revisão visual", "a peça parece IA"]
+    obrigatorio: [diretor-de-arte, consistencia-visual]
+    complementar: [design-system, direcao-imagem-ia]
+    orcamento: 3
+    arquivos:
+      - skills/consistencia-visual.md.tpl

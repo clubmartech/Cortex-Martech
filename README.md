@@ -6,7 +6,7 @@ O **Cortex** é um ecossistema de documentação feito para ser lido por IA. Em 
 
 Ele é **genérico por construção**: tudo que é específico da organização (marcas, ofertas, canais, times, papéis, integrações, governança) vive em um único `cortex.config.yaml`, preenchido por um questionário. A partir dele o `build` gera os arquivos de contexto iniciais, o `AGENTS.md` (instrução canônica, lida por qualquer IA), o `CLAUDE.md` (atalho para o Claude Code), o `ROTAS.md`, o `CATALOGO.md` e os wrappers de skills. Packs (marketing, vendas, cs, produto, eventos, dados) trazem agentes e skills prontos, instanciados só para os canais, integrações, ofertas e times que o contexto realmente tem — `pack suggest` diz quais fazem sentido.
 
-O **kernel** (`_cortex/`) é mantido pelo projeto e nunca é sobrescrito pelo seu time; o **contexto** (`contexto/`) e os **times** (`times/`) são seus; os **gerados** (`ROTAS.md`, `AGENTS.md`, …) são sempre recriados pelo `build`. Um `checkup` analisa a máquina, as ferramentas conectadas e os materiais existentes antes do questionário, para que o onboarding se adapte ao contexto; um `doctor` com 14 checks mantém a base coerente — e, no Claude Code, hooks aplicam essas regras antes de cada leitura ou escrita.
+O **kernel** (`_cortex/`) é mantido pelo projeto e nunca é sobrescrito pelo seu time; o **contexto** (`contexto/`) e os **times** (`times/`) são seus; os **gerados** (`ROTAS.md`, `AGENTS.md`, …) são sempre recriados pelo `build`. Um `checkup` analisa a máquina, as ferramentas conectadas e os materiais existentes antes do questionário, para que o onboarding se adapte ao contexto; um `doctor` com 15 checks mantém a base coerente — e, no Claude Code, hooks aplicam essas regras antes de cada leitura ou escrita.
 
 ## Memória pessoal × Cortex do projeto
 
@@ -61,7 +61,7 @@ Bibliotecas públicas de skills de marketing serviram de referência para métod
 | Comando | O que faz |
 |---|---|
 | `python3 _cortex/cli/cortex.py checkup [--json]` | Pré-onboarding: sistema, Python, git, pasta sincronizada, ambientes de IA, servidores MCP e variáveis de ambiente (só nomes), inventário de materiais, idioma, packs sugeridos, alertas. Grava `_cortex/.build/checkup.json`. |
-| `… doctor [--quick] [--fix] [--json] [arquivo…]` | 14 checks (estrutura, config, frontmatter, placeholders, links, rotas, tamanho, drift, segurança, histórico, nomenclatura, duplicatas, encoding e interfaces). `--quick` roda 1, 2, 4 e 9 em < 1 s. Sai com 1 se houver ERRO. |
+| `… doctor [--quick] [--fix] [--json] [arquivo…]` | 15 checks (estrutura, config, frontmatter, placeholders, links, rotas, tamanho, drift, segurança, histórico, nomenclatura, duplicatas, encoding, interfaces e visual). `--quick` roda 1, 2, 4 e 9 em < 1 s. Sai com 1 se houver ERRO. |
 | `… build [--first-run] [--only rotas\|catalogo\|wrappers\|contexto\|boot\|interfaces]` | Regera contexto ausente, instala packs pendentes, catálogo, `ROTAS.md`, `AGENTS.md`, `CLAUDE.md`, `CATALOGO.md`, `boot.md` e wrappers. Idempotente. |
 | `… init --answers <yaml>` | Valida as respostas, grava o config, `build --first-run`, `doctor`. |
 | `… lint --file <a.md> [--stdin]` | Checks de um arquivo só (usado pelo hook). |
@@ -105,6 +105,16 @@ raiz/
 - **Skill / agente / doc:** `python3 _cortex/cli/cortex.py new skill --time marketing --id redator-podcast --familia CRIAR.video --canal youtube` cria `times/marketing/skills/redator-podcast.md` com os 14 campos e as seções obrigatórias. Preencha os `[PENDENTE]`, declare `requires` (começando pelo agente que roteia a skill), rode `lint`, depois `build`. Regras completas: `_cortex/CONTRATOS.md` §2.
 - **Pack:** crie `_cortex/packs/<id>/pack.yaml` (formato em `_cortex/CONTRATOS.md` §5) com `arquivos_base`, `subfamilias` (cada uma com `condicao`, `sinais`, `obrigatorio`, `orcamento`, `arquivos`) e os `*.tpl` em `agents/`, `skills/`, `docs/`. Templates usam a sintaxe de `_cortex/CONTRATOS.md` §7 e recebem `{config, pack, time, agora, item}`. Instale com `pack install <id> --time <slug>`; `pack diff <id>` mostra o que o time alterou depois.
 
+## Pack visual em três comandos
+
+```bash
+python3 _cortex/cli/cortex.py pack install visual --time <slug>
+/kit-visual                       # no Claude Code: radar → DNA → estilos e direções → design system → acervo → mapa → pilotos
+python3 _cortex/cli/cortex.py doctor
+```
+
+O pack não gera arte sozinho: ele busca referência do nicho com procedência, transforma o que a pessoa aprova em sistema próprio (tokens, estilos, direções, mapa de conteúdo) e confere as peças. Quem produz são os executores declarados em `visual.executores`. Scripts sem dependências em `_cortex/packs/visual/scripts/`: `radar.py`, `acervo.py`, `tokens.py`, `consistencia.py`.
+
 ## Packs disponíveis
 
 | Pack | Quando é sugerido | O que traz |
@@ -115,6 +125,8 @@ raiz/
 | `produto` | time produto ou oferta do tipo produto | product marketer, documentador de produto; posicionamento, mensagens por público, lançamento, release notes, aviso, funcionalidade, triagem, battlecard, pesquisa, roadmap, registro de publicações |
 | `eventos` | oferta evento ou canal eventos | produtor de evento; edição, receita, metas, ciclo, cupons, patrocínio, speakers, calendário, run-of-show, pós-evento, kit de comunicação, deck do dia |
 | `dados` | integração de dados/analytics ou time dados | analista de dados; fontes, consulta de métrica, dicionário, funil e origens, cohort, atribuição, relatório recorrente, qualidade, anomalia |
+| `conteudo` | canal blog ou SEO | editor; artigo, verbete, notícia, aula, ferramenta web, calendário editorial |
+| `visual` | canal de rede social, vídeo ou landing page, time design ou bloco `visual` | curador visual, diretor de arte, arquiteto de conteúdo; radar de referências do nicho, DNA visual, acervo com licença e galeria, design system em tokens DTCG com contraste, biblioteca de estilos, direção de foto, vídeo e imagem IA, mapa de conteúdo, consistência visual, `/kit-visual` (orquestrador) |
 
 Todo pack é genérico: marca, produto, público, canal e ferramenta entram pelo config. O que não existe no contexto fica em `ROTAS.md` §5 como inativo, com o motivo.
 

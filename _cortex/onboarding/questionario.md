@@ -145,11 +145,31 @@ Padrões: semanal · git conforme B6.1 · telemetria desligada · [dados-de-clie
 ## B10 — Packs
 `condicao: sempre`
 
-Rode `python3 _cortex/cli/cortex.py pack suggest`: ele avalia a condição `sugerir_se` de cada pack existente contra as respostas já gravadas. Regras hoje: `marketing` sempre · `vendas` se B2B/B2B2C ou time vendas · `cs` se time cs/suporte/atendimento · `produto` se time produto ou oferta do tipo produto · `eventos` se oferta evento ou canal eventos · `dados` se integração de dados/analytics ou time dados. Some as pistas do `checkup` (materiais na pasta). Mostre só packs que existem em `_cortex/packs/`.
+Rode `python3 _cortex/cli/cortex.py pack suggest`: ele avalia a condição `sugerir_se` de cada pack existente contra as respostas já gravadas. Regras hoje: `marketing` sempre · `vendas` se B2B/B2B2C ou time vendas · `cs` se time cs/suporte/atendimento · `produto` se time produto ou oferta do tipo produto · `eventos` se oferta evento ou canal eventos · `dados` se integração de dados/analytics ou time dados · `visual` se canal de rede social, vídeo ou landing page, time design ou bloco `visual`. Some as pistas do `checkup` (materiais na pasta). Mostre só packs que existem em `_cortex/packs/`.
 
 | # | Pergunta | Opções | ⇒ |
 |---|---|---|---|
 | 🔸 B10.1 | Confirma a instalação destes packs? Em qual time cada um entra? | lista sugerida | `packs[]` com `instalado_em: times/<slug>`; `times[].pack` |
+
+---
+
+## B11 — Visual (pack `visual`)
+`condicao: pack:visual or tem:visual` — só quando o pack visual for instalado ou a pessoa pedir sistema visual.
+
+Pergunte o que alimenta o radar e as direções. Não peça valores de cor ou fonte aqui: eles nascem no `kit-visual`, a partir de referências aprovadas, ou são transcritos do que a marca já tem.
+
+| # | Pergunta | Opções | ⇒ |
+|---|---|---|---|
+| 🔸 B11.1 | Em uma frase, qual é o nicho visual? (o que a marca faz, onde, para quem) | texto livre | `visual.nicho` |
+| ◽ B11.2 | Que termos alguém do nicho usaria para buscar referência? (pt e en) | texto livre · "a IA sugere" | `visual.termos_nicho` |
+| 🔸 B11.3 | Quem precisa se reconhecer nas imagens? | públicos do B4 · outro | `visual.publico_visual` |
+| 🔸 B11.4 | A comunicação mostra pessoas reais (fundador, equipe, clientes)? | sim · não · às vezes | `visual.pessoas_reais` (muda retrato e autorização) |
+| 🔸 B11.5 | Quais formatos o sistema precisa cobrir? (múltipla) | feed · carrossel · stories/reels · vídeo horizontal · site/landing · e-mail · apresentação | `visual.formatos` |
+| ◽ B11.6 | Quem gera imagem, vídeo e peça de design? | ferramenta de IA específica · editor ou motor de vídeo · Figma · HTML · pessoa da equipe | `visual.executores` (sem resposta: a skill entrega especificação para humano) |
+| ◽ B11.7 | Que perfis, sites ou canais você já usa como referência? | lista de URLs | `visual.fontes_proprias` (prioridade 1 no radar) |
+| ◽ B11.8 | Alguma fonte que não quer usar (paga, concorrente direto, estética contrária)? | lista | `visual.fontes_vetadas` |
+
+Padrões: termos sugeridos pela IA a partir do nicho e aprovados · executores vazios · nenhuma fonte vetada além das pagas.
 
 ---
 
