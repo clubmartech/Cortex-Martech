@@ -243,10 +243,12 @@ class IndiceDisco:
     def __init__(self, root):
         self.root = Path(root)
         self.reais, self.por_caixa, self.por_nome = set(), {}, {}
+        excl = scope.excluir_extra(root)
         for dp, dn, fn in os.walk(self.root):
-            dn[:] = [x for x in dn if x not in (".git", "node_modules", "__pycache__")]
             relp = scope.rel(root, dp)
             relp = "" if relp == "." else relp
+            dn[:] = [x for x in dn if x not in (".git", "node_modules", "__pycache__")
+                     and not scope._fora((relp + "/" + x) if relp else x, excl)]
             for d in dn:
                 p = (relp + "/" + d) if relp else d
                 self.reais.add(p)
@@ -323,6 +325,54 @@ def _candidatos(origem_dir, bruto):
     return cands
 
 
+def _raiz_projeto(root):
+    """Raiz do projeto que hospeda o Cortex ().
+
+    O Cortex nasceu para ser a raiz da pasta. Instalado dentro de um projeto que já tem camada
+    própria (por exemplo, em `AI/Cortex/`), os docs apontam para fora dele, na notação do
+    projeto: crase a partir da raiz do projeto (`AI/Negocio/01-oferta.md`) e link relativo ao
+    arquivo (`../../Negocio/01-oferta.md`). Sem isto, todo ponteiro para a fonte canônica vira ERRO.
+    Opt-in: sem `CORTEX_PROJETO` nem `projeto.raiz` (relativo à raiz do Cortex), nada atravessa a raiz
+    além do manifesto de `interfaces`.
+    """
+    env = os.environ.get("CORTEX_PROJETO")
+    if env and Path(env).is_dir():
+        return Path(env).resolve()
+    try:
+        from . import config as _cfg
+        rel_ = ((_cfg.carregar(root) or {}).get("projeto") or {}).get("raiz")
+    except Exception:
+        rel_ = None
+    if rel_:
+        p = (Path(root) / rel_).resolve()
+        if p.is_dir():
+            return p
+    return None
+
+
+def _existe_fora_da_raiz(root, origem_dir, norm, forma):
+    """Ponteiro que sai da raiz do Cortex e existe dentro da raiz declarada do projeto hospedeiro."""
+    proj = _raiz_projeto(root)
+    if proj is None:
+        return False
+    alvo = norm.split("#")[0].split("?")[0]
+    alvo = re.split(r"\s+§", alvo)[0].strip()
+    if not alvo:
+        return False
+    if forma == "link":
+        cands = [(Path(root) / origem_dir / alvo).resolve()]
+    else:
+        cands = [(proj / alvo).resolve(), (Path(root) / alvo).resolve(), (Path(root) / origem_dir / alvo).resolve()]
+    for c in cands:
+        try:
+            c.relative_to(proj)
+        except ValueError:
+            continue
+        if c.exists():
+            return True
+    return False
+
+
 def check_links(root, docs, indice=None):
     ach = []
     # Só o manifesto explicitamente configurado pode atravessar a raiz do Cortex.
@@ -370,6 +420,8 @@ def check_links(root, docs, indice=None):
             if external_manifest is not None and any((Path(root) / c).resolve() == external_manifest for c in cands):
                 continue
             if not cands or any(c in indice.reais for c in cands):
+                continue
+            if _existe_fora_da_raiz(root, origem_dir, norm, forma):  # base instalada dentro de um projeto
                 continue
             alt = next((indice.por_caixa[c.lower()] for c in cands if c.lower() in indice.por_caixa), None)
             if alt:
@@ -484,6 +536,8 @@ def check_drift(root, cfg, docs, manifest, plano=None):
     if plano:
         for dest, conteudo in plano["saidas"].items():
             atual = fs.ler(root, dest)
+            if atual is not None and not scope.eh_gerado(root, dest):
+                continue  # arquivo do projeto, mantido pelo build
             if atual is None:
                 ach.append(Achado(AVISO, dest, "arquivo gerado ausente — rode `build`", None, 8))
             elif _normaliza_data(atual, conteudo) != atual:

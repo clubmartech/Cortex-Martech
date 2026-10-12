@@ -35,6 +35,21 @@ def descobrir_raiz(inicio=None):
     return None
 
 
+def excluir_extra(root):
+    """`escopo.excluir` no config: caminhos relativos (pasta ou arquivo) fora do escopo.
+    Para instalar o Cortex na raiz de um projeto que já tem acervo próprio sem varrer tudo."""
+    try:
+        from . import config as _c
+        lst = ((_c.carregar(root) or {}).get("escopo") or {}).get("excluir") or []
+    except Exception:
+        lst = []
+    return {str(x).strip().strip("/") for x in lst if str(x).strip()}
+
+
+def _fora(relp, excl):
+    return any(relp == e or relp.startswith(e + "/") for e in excl)
+
+
 def rel(root, path):
     return os.path.relpath(str(path), str(root)).replace("\\", "/")
 
@@ -43,6 +58,7 @@ def arquivos_md(root):
     """Todos os .md do escopo, como caminhos relativos (com `/`), ordenados."""
     root = Path(root)
     saida = []
+    excl = excluir_extra(root)
     for dp, dn, fn in os.walk(root):
         relp = rel(root, dp)
         if relp == ".":
@@ -51,11 +67,14 @@ def arquivos_md(root):
         if partes and partes[0] == "_cortex" and len(partes) >= 2 and partes[1] in EXCLUIR_CORTEX:
             dn[:] = []
             continue
-        dn[:] = sorted(d for d in dn if d not in EXCLUIR_DIRS and not (partes == ["_cortex"] and d in EXCLUIR_CORTEX))
+        dn[:] = sorted(d for d in dn if d not in EXCLUIR_DIRS and not (partes == ["_cortex"] and d in EXCLUIR_CORTEX)
+                       and not _fora((relp + "/" + d) if relp else d, excl))
         for f in sorted(fn):
             if not f.lower().endswith(".md") or f.startswith("~$") or f.startswith("."):
                 continue
-            saida.append((relp + "/" + f) if relp else f)
+            arq = (relp + "/" + f) if relp else f
+            if not _fora(arq, excl):
+                saida.append(arq)
     return saida
 
 
@@ -63,6 +82,7 @@ def arquivos_todos(root):
     """Todos os arquivos (qualquer extensão) do escopo — para o check de binários."""
     root = Path(root)
     saida = []
+    excl = excluir_extra(root)
     for dp, dn, fn in os.walk(root):
         relp = rel(root, dp)
         if relp == ".":
@@ -71,9 +91,11 @@ def arquivos_todos(root):
         if partes and partes[0] == "_cortex" and len(partes) >= 2 and partes[1] == ".build":
             dn[:] = []
             continue
-        dn[:] = sorted(d for d in dn if d not in EXCLUIR_DIRS)
+        dn[:] = sorted(d for d in dn if d not in EXCLUIR_DIRS and not _fora((relp + "/" + d) if relp else d, excl))
         for f in sorted(fn):
-            saida.append((relp + "/" + f) if relp else f)
+            arq = (relp + "/" + f) if relp else f
+            if not _fora(arq, excl):
+                saida.append(arq)
     return saida
 
 
@@ -94,18 +116,24 @@ def eh_isento(path):
 def eh_gerado(root, path):
     """Arquivo gerado pelo build: pelo caminho fixo ou por `origem: gerado` no frontmatter."""
     p = str(path).replace("\\", "/")
-    if p in GERADOS_RAIZ or p == "_cortex/.build/boot.md":
-        return True
-    if p.startswith(".claude/skills/"):
-        nome = p.split("/")[2] if len(p.split("/")) > 2 else ""
-        return not nome.startswith("cortex-")
-    if p.startswith(".claude/agents/"):
+    if p == "_cortex/.build/boot.md":
         return True
     try:
         texto = (Path(root) / p).read_text(encoding="utf-8", errors="replace")[:4000]
     except OSError:
-        return False
-    return bool(re.search(r"^origem:\s*gerado\s*$", texto, re.M))
+        texto = None
+    marcado = texto is not None and (bool(re.search(r"^origem:\s*gerado\s*$", texto, re.M))
+                                     or "gerado pelo cortex build" in texto)
+    # CLAUDE.md, AGENTS.md e wrappers só são "gerados" se o build os escreveu.
+    # Sem isto o hook nega editar o CLAUDE.md escrito à mão de um projeto que já existia.
+    if p in GERADOS_RAIZ:
+        return texto is None or marcado
+    if p.startswith(".claude/skills/"):
+        nome = p.split("/")[2] if len(p.split("/")) > 2 else ""
+        return (not nome.startswith("cortex-")) and marcado
+    if p.startswith(".claude/agents/"):
+        return marcado
+    return marcado
 
 
 def dentro_de(root, path, pasta):

@@ -72,7 +72,7 @@ validado_em: {{agora}}
 ## 7. Auditoria
 
 - **Periodicidade:** {{default governanca.auditoria.periodicidade "sob demanda"}}{{#if tem:governanca.auditoria.quando}} ({{governanca.auditoria.quando}}){{/if}}
-- **Como:** `python3 _cortex/cli/cortex.py doctor` — relatório em `_cortex/.build/last-doctor.json`; corrigir ERRO antes de AVISO.
+- **Como:** `{{default sessao.python "python3"}} _cortex/cli/cortex.py doctor` — relatório em `_cortex/.build/last-doctor.json`; corrigir ERRO antes de AVISO.
 - **Responsável:** [PENDENTE: preencher — papel que roda a auditoria]
 
 ## Histórico

@@ -34,7 +34,7 @@ Para revisar um bloco ou instalar um pack: `/cortex-init` (Claude Code) ou siga 
 ⚠️ **Onboarding incompleto** (`meta.onboarding.status: {{meta.onboarding.status}}`). Antes de atender qualquer pedido de criação ou estratégia, conduza o questionário:
 1. Abra `_cortex/onboarding/questionario.md` e faça os blocos pendentes, **um bloco por rodada, sempre com opções**.
 2. Grave as respostas em `cortex.config.yaml` seguindo `_cortex/onboarding/schema/cortex.config.schema.json`.
-3. Se houver Python: `python3 _cortex/cli/cortex.py build --first-run` e depois `doctor`. Sem Python: siga a checklist de `_cortex/onboarding/geracao.md`.
+3. Se houver Python: `{{default sessao.python "python3"}} _cortex/cli/cortex.py build --first-run` e depois `doctor`. Sem Python: siga a checklist de `_cortex/onboarding/geracao.md`.
 {{/if}}
 
 **Em ambiente sem carregamento automático:** abra o gate e a rota pertinente. Leia marca, produto, voz e governança conforme a tarefa. Um resumo de hook não equivale à leitura de todas as fontes.
@@ -65,7 +65,8 @@ Fonte essencial indisponível: informe a lacuna e continue as partes independent
 - **Ativação direta:** a pessoa pode chamar um agente pelo nome. Vá direto ao passo 3 — mas o gate, a postura crítica e a descoberta continuam valendo.
 - **Como um agente ou skill é encontrado:** por `id` + `gatilhos` do frontmatter; o que abrir junto está no `requires`. Catálogo completo com caminho e peso: `CATALOGO.md`.
 - **Regra de ouro:** execute com contexto suficiente. Pergunte quando faltar informação essencial; não repita perguntas respondidas nem confirmação de ação já autorizada.
-- **A oferta vem do pedido ou briefing.** Skill com `produto: todos` serve qualquer oferta; pergunte somente se ela for necessária e continuar ambígua ({{#each produtos as p}}{{p.nome}}{{#if @last}}{{else}} · {{/if}}{{/each}}). Tarefa sem oferta: não aplicável.
+{{#if tem:sessao.idiomas_conteudo}}- **Idioma de entrega ao público:** {{join sessao.idiomas_conteudo " + "}}, em versões completas — a documentação é em {{sessao.idioma}}, o texto de cliente final não. Regras de cada idioma: `contexto/brandcenter/brandcenter.md`.
+{{/if}}- **A oferta vem do pedido ou briefing.** Skill com `produto: todos` serve qualquer oferta; pergunte somente se ela for necessária e continuar ambígua ({{#each produtos as p}}{{p.nome}}{{#if @last}}{{else}} · {{/if}}{{/each}}). Tarefa sem oferta: não aplicável.
 
 ### 2.1 Postura crítica — desafie antes de aceitar
 Qual é o problema real por trás do pedido? Esse é o caminho certo? É coerente com marca, dados e o resto do time? O que pode dar errado? **Não é bloqueio:** aponte, proponha a alternativa e siga; se a pessoa mantiver, execute.
@@ -89,8 +90,8 @@ Famílias do kernel sempre disponíveis: `REVISAR` · `REGISTRAR` · `DOCUMENTAR
 
 Manifesto canônico: `{{interfaces_contexto.manifesto}}` · {{interfaces_contexto.total}} contratos · {{interfaces_contexto.perfis}} perfis. Não carregue o manifesto inteiro na conversa.
 
-1. Busque por tarefa: `python3 _cortex/cli/cortex.py interfaces list --query <termo>` (20 resultados por página; `--offset` continua).
-2. Consulte um contrato: `python3 _cortex/cli/cortex.py interfaces show <id>`; use id completo se houver nomes iguais.
+1. Busque por tarefa: `{{default sessao.python "python3"}} _cortex/cli/cortex.py interfaces list --query <termo>` (20 resultados por página; `--offset` continua).
+2. Consulte um contrato: `{{default sessao.python "python3"}} _cortex/cli/cortex.py interfaces show <id>`; use id completo se houver nomes iguais.
 3. Abra a fonte e somente os componentes pertinentes. Siga relações condicionais preservando briefing, decisões, fontes e autorização.
 
 O índice `{{interfaces_contexto.index}}` é gerado; edite a fonte indicada no manifesto. Memória pessoal, contexto do negócio e voz editorial têm destinos próprios, conforme o componente aplicável. Valide com `interfaces check` e regenere com `build --only interfaces`.
@@ -98,7 +99,7 @@ O índice `{{interfaces_contexto.index}}` é gerado; edite a fonte indicada no m
 
 ## 4. Destinos, permissões e registro
 
-1. **Registro primário da operação:** {{#if tem:registro_primario}}**{{registro_primario.nome}}** (ficha: `contexto/integracoes/{{registro_primario.slug}}.md`). No registro devem constar o texto publicado, a arte publicada e o resultado com análise.{{else}}nenhum sistema externo configurado — o registro é `_saida/<AAAA-MM>/` {{#if governanca.git}}+ commit no git{{/if}}.{{/if}}
+1. **Registro primário da operação:** {{#if tem:registro_primario}}**{{registro_primario.nome}}** (ficha: `contexto/integracoes/{{registro_primario.slug}}.md`).{{#if operacao.destino_material_gerado == "registro"}} No registro devem constar o texto publicado, a arte publicada e o resultado com análise.{{else}} É a fonte do dado operacional; material gerado não é registrado lá por padrão (item 2).{{/if}}{{else}}nenhum sistema externo configurado — o registro é `_saida/<AAAA-MM>/` {{#if governanca.git}}+ commit no git{{/if}}.{{/if}}
 2. **Material gerado nunca vai para a documentação** (copy, peças, campanhas, análises). Destino: {{#if operacao.destino_material_gerado == "registro"}}o registro primário{{/if}}{{#if operacao.destino_material_gerado == "saida-local"}}`_saida/<AAAA-MM>/`{{/if}}{{#if operacao.destino_material_gerado == "chat"}}o próprio chat{{/if}}. Exceções: briefing preenchido (`briefings/<ciclo>/`) e o fallback sem destino (`_saida/`).
 3. {{#if operacao.fluxo_chat_antes_do_arquivo}}**Chat antes do arquivo quando o destino não estiver definido:** apresente o resultado. Se o pedido já autoriza criar ou editar um arquivo, execute nesse destino sem repetir a pergunta; caso contrário, confirme apenas o destino necessário.{{else}}Pode gravar arquivo direto quando o destino for claro; sem destino, `_saida/` e avise.{{/if}}
 4. {{#if operacao.criar_arquivo_sem_pedido}}Arquivo novo na base pode ser criado quando for conhecimento operacional reutilizável — com frontmatter válido.{{else}}**Nunca crie arquivo novo na base sem pedido explícito.** O padrão é entregar no chat.{{/if}}
@@ -112,7 +113,7 @@ O índice `{{interfaces_contexto.index}}` é gerado; edite a fonte indicada no m
 ## 5. Para quem mantém o sistema
 
 - **Independência de IA:** `AGENTS.md` + Markdown com caminhos relativos. `.claude/` é conveniência (hooks + wrappers gerados), não requisito.
-- **Comandos:** `python3 _cortex/cli/cortex.py doctor` (checkup) · `build` (regera gerados) · `init` (onboarding) · `new skill|agent|doc` · `lint --file` · `pack list|install|diff`.
+- **Comandos:** `{{default sessao.python "python3"}} _cortex/cli/cortex.py doctor` (checkup) · `build` (regera gerados) · `init` (onboarding) · `new skill|agent|doc` · `lint --file` · `pack list|install|diff`.
 - **Adicionar um agente ou skill:** `cortex new …` cria o arquivo em `times/<time>/` com frontmatter; declare `familia` e `requires`; rode `build` para entrar no `ROTAS.md`/`CATALOGO.md`.
 - **Times e papéis:** {{#each times as t}}`{{t.slug}}` ({{join t.papeis ", "}}){{#if @last}}{{else}} · {{/if}}{{/each}}. Quem ocupa cada papel: `contexto/organizacao.md`.
 - **Auditoria:** {{#if tem:governanca.auditoria.periodicidade}}{{governanca.auditoria.periodicidade}}{{#if tem:governanca.auditoria.quando}} ({{governanca.auditoria.quando}}){{/if}}{{else}}sob demanda{{/if}} — `cortex doctor` com relatório em `_cortex/.build/last-doctor.json`.

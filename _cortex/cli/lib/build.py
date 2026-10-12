@@ -60,8 +60,9 @@ def plano_contexto(root, cfg, contexto, first_run=False):
     for i in cfg.get("integracoes") or []:
         itens.append(("contexto/integracoes/%s.md" % i.get("slug"), "integracao.md.tpl", i))
     saida, faltantes = {}, []
+    protegidos = {".claude/settings.json", ".gitignore", ".env.example"}  # nunca sobrescrever config do projeto
     for dest, tpl, item in itens:
-        if not first_run and fs.existe(root, dest):
+        if fs.existe(root, dest) and (not first_run or dest in protegidos):
             continue
         if not (Path(root) / TPL / tpl).exists():
             faltantes.append("template ausente: %s" % tpl)
@@ -138,6 +139,8 @@ def executar(root, cfg, first_run=False, only=None, log=print):
         return _fim(alterados, removidos, avisos, log)
     for p in PASTAS:
         fs.mkdir(root, p)
+    if ((cfg or {}).get("operacao") or {}).get("ciclo_planejamento") == "nenhum":
+        fs.mkdir(root, "briefings/avulso")  # o template de organização aponta para ela
 
     if only in (None, "contexto"):
         contexto = _ctx.montar(root, cfg)
@@ -172,7 +175,12 @@ def executar(root, cfg, first_run=False, only=None, log=print):
         "catalogo": {"CATALOGO.md"},
         "wrappers": set(),
     }[only]
+    from . import scope as _scope
     for dest in quais:
+        if not _scope.eh_gerado(root, dest):
+            # arquivo existente sem a marca do build é do projeto: avisa e não toca
+            avisos.append("%s existe e não foi gerado pelo build — mantido; importe `AGENTS.md` nele se quiser o Cortex" % dest)
+            continue
         if fs.gravar(root, dest, plano["saidas"][dest]):
             alterados.append(dest)
     if only in (None, "catalogo"):

@@ -37,19 +37,31 @@ def esperados(root, docs, base_ctx, cfg):
     return saida
 
 
+MARCA = "gerado pelo cortex build"
+
+
+def _nosso(p):
+    """só é órfão removível o wrapper que traz a marca do build.
+    Sem isto, instalar o Cortex num projeto que já tem `.claude/skills` apaga as skills dele."""
+    try:
+        return MARCA in p.read_text(encoding="utf-8", errors="replace")[:3000]
+    except OSError:
+        return False
+
+
 def existentes(root):
-    """Wrappers presentes no disco (exclui `cortex-*`)."""
+    """Wrappers presentes no disco e gerados pelo build (exclui `cortex-*` e o que não tem a marca)."""
     saida = []
     base = Path(root)
     sk = base / SKILLS_DIR
     if sk.is_dir():
         for d in sk.iterdir():
-            if d.is_dir() and not d.name.startswith("cortex-") and (d / "SKILL.md").exists():
+            if d.is_dir() and not d.name.startswith("cortex-") and (d / "SKILL.md").exists() and _nosso(d / "SKILL.md"):
                 saida.append("%s/%s/SKILL.md" % (SKILLS_DIR, d.name))
     ag = base / AGENTS_DIR
     if ag.is_dir():
         for f in ag.iterdir():
-            if f.is_file() and f.suffix == ".md" and not f.name.startswith("cortex-"):
+            if f.is_file() and f.suffix == ".md" and not f.name.startswith("cortex-") and _nosso(f):
                 saida.append("%s/%s" % (AGENTS_DIR, f.name))
     return saida
 

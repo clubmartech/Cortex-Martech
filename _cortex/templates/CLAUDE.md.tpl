@@ -19,8 +19,8 @@ validado_em: {{agora}}
 # CLAUDE.md — atalho
 
 > Este projeto usa **`AGENTS.md`** como instrução canônica (padrão aberto, multi-IA). **Leia e siga `./AGENTS.md`.**
-> O hook de início de sessão roda `cortex doctor --quick` e injeta `_cortex/.build/boot.md` (resumo do config, famílias ativas e agentes). Os `@import` abaixo carregam a fundação. A declaração de leituras segue `sessao.declaracao_leituras`; nunca trate o resumo como prova de leitura integral.
-> 🚫 Nunca leia `_arquivo/`. 🚫 Nunca edite arquivo com `origem: gerado` — edite a fonte e rode `python3 _cortex/cli/cortex.py build`.
+> {{#if sessao.gate == "declarativo+hook"}}O hook de início de sessão roda `cortex doctor --quick` e injeta `_cortex/.build/boot.md` (resumo do config, famílias ativas e agentes).{{else}}Neste Cortex o gate é declarativo: nenhum hook garante o resumo de sessão; abra a fundação à mão.{{/if}} Os `@import` abaixo carregam a fundação. A declaração de leituras segue `sessao.declaracao_leituras`; nunca trate o resumo como prova de leitura integral.
+> 🚫 Nunca leia `_arquivo/`. 🚫 Nunca edite arquivo com `origem: gerado` — edite a fonte e rode `{{default sessao.python "python3"}} _cortex/cli/cortex.py build`.
 > {{#if operacao.criar_arquivo_sem_pedido}}Arquivo novo na base só com frontmatter válido.{{else}}**Nunca crie arquivo novo nesta pasta sem pedido explícito.**{{/if}}
 
 @AGENTS.md

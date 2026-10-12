@@ -11,6 +11,7 @@ Falha interna -> allow silencioso (exit 0).
 import json
 import os
 import sys
+import unicodedata
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -38,6 +39,8 @@ def _no_escopo(relp):
         return False
     if partes[0] == "_cortex" and len(partes) > 2 and partes[1] in scope.EXCLUIR_CORTEX:
         return False
+    if scope._fora(relp, scope.excluir_extra(H.raiz())):
+        return False
     return not scope.eh_isento(relp)
 
 
@@ -60,6 +63,11 @@ def main():
         p_res = p.resolve()
     except OSError:
         p_res = p
+    # o macOS devolve o caminho do disco em NFD ("Área" decomposto) e a
+    # ferramenta manda NFC. Sem normalizar os dois lados, relpath sai com "../.." e o hook
+    # libera tudo em silêncio em qualquer pasta com acento no caminho.
+    root = Path(unicodedata.normalize("NFC", str(root)))
+    p_res = Path(unicodedata.normalize("NFC", str(p_res)))
     H.carregar_cli(root)
     from lib import scope, fs, config as _cfg
     # 1. _arquivo/

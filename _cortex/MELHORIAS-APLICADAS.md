@@ -51,3 +51,28 @@ Fontes externas foram usadas como referência, sem instalar serviços nem altera
 ## 2026-10-04 — 0.2.0-local.2, fontes e atualização padrão
 
 Comparação confirmou que o Cortex pessoal e o Cortex do projeto têm finalidades, armazenamento e programas diferentes. Permanecem em suas fontes próprias; não são duplicatas a fundir. O registro de fontes do projeto passa a consultar a versão no arquivo VERSION, evitando manter um número manual concorrente. Governança e componente de aprendizado definem atualização na origem com evidência, histórico, regeneração e verificação dos consumidores.
+
+## 2026-10-12 — 0.3.0, distribuição agnóstica e convivência com projeto existente
+
+Primeira versão publicada fora de uma instância. Junta o núcleo 0.2.0-local.2 às correções que uma segunda instância (Cortex instalado em subpasta de um projeto com camada própria, caminho com acento e entrega multilíngue) precisou fazer por patch local, e a duas práticas de uma terceira base (marca pessoal, um interlocutor).
+
+| Problema | Alteração | Onde |
+|---|---|---|
+| Ponteiro para a fonte canônica fora da raiz do Cortex virava ERRO no check 5 | `projeto.raiz` (opt-in; ou `CORTEX_PROJETO`) resolve crase em notação do projeto, só dentro da raiz declarada | `cli/lib/checks.py::_raiz_projeto` |
+| Hook liberava tudo em silêncio em caminho com acento (NFD × NFC no macOS) | normalização NFC dos dois lados | `.claude/hooks/pre_tool_use.py` |
+| `build` apagava skills e agentes do projeto em `.claude/` como "órfãos" | só remove wrapper com a marca `gerado pelo cortex build` | `cli/lib/wrappers.py` |
+| `init` sobrescrevia `settings.json`, `.gitignore` e `.env.example` do projeto | arquivos protegidos | `cli/lib/build.py` |
+| `CLAUDE.md`/`AGENTS.md` escritos à mão eram sobrescritos e o hook negava editá-los | "gerado" decidido pela marca no conteúdo; build avisa e mantém; check 8 ignora | `cli/lib/scope.py::eh_gerado`, `build.py`, `checks.py::check_drift` |
+| Sem como tirar acervo do projeto do scanner | `escopo.excluir` (scanner, índice, binários, hook) | `cli/lib/scope.py`, `checks.py`, hook |
+| `nome-30-45.md` acusado como cópia | `nome-N.md` só é cópia quando `nome.md` existe ao lado | `checks.py::check_nomenclatura` + teste |
+| Interpretador fixo nos gerados | `sessao.python` (padrão `python3`) | templates |
+| Documentação num idioma, cliente em outros | `sessao.idiomas_conteudo` no `AGENTS.md` e no boot | templates, schema |
+| `CLAUDE.md` afirmava hook mesmo com gate declarativo; `AGENTS.md` mandava registrar a peça com destino `chat` | condicionais por `sessao.gate` e `operacao.destino_material_gerado` | templates |
+| `briefings/avulso/` citado mas não criado com ciclo `nenhum` | `build` cria a pasta | `build.py` |
+| `descricao` do banco de criatividade passava de 160 caracteres | texto curto fixo | `packs/marketing/docs/criatividade-*.tpl` |
+| Entrega gravada tratada como aprovada ou publicada | três estados com evidência própria | `kernel/governanca.md` §8 |
+| Escolha pontual promovida a regra permanente | classificação do feedback | `kernel/gate.md` §4 |
+| `CONTRATOS.md` com dois §11 e tabela sem o check 14; governança citava `saida` e o schema aceita `saida-local` | renumeração, linha 14, valor alinhado | `CONTRATOS.md`, `kernel/governanca.md` |
+| Testes dependiam do config da instância | caem no exemplo de onboarding quando não há config | `cli/tests/test_interfaces.py` |
+
+Verificação: 25 testes; instalação limpa + `init` com os três exemplos de onboarding + `build` idempotente + `doctor` sem erro; hooks testados por stdin.

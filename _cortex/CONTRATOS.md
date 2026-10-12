@@ -230,14 +230,15 @@ Inclui todo `.md` sob a raiz. Exclui: `_arquivo`, `_saida`, `_assets`, `.claude`
 | 8 | drift | hash fm+headings vs manifesto sem `validado_em` novo; wrapper/gerado desatualizado | ERRO/AVISO |
 | 9 | segurança | token/secret/bearer/URL de webhook em texto; binário > `binario_mb` no escopo; `.env` fora do `.gitignore` | ERRO/AVISO |
 | 10 | histórico | `## Histórico` presente; 1ª data == `validado_em` (`--fix`) | AVISO |
-| 11 | nomenclatura | kebab-case sem acento/espaço; sufixos de cópia (`(1)`, `.bak`, `-1.md`, conflito) | AVISO |
+| 11 | nomenclatura | kebab-case sem acento/espaço; sufixos de cópia (`(1)`, `.bak`, conflito; `nome-1.md` só quando `nome.md` existe ao lado) | AVISO |
 | 12 | duplicatas | corpo idêntico (AVISO); `id` repetido (ERRO) | ERRO/AVISO |
 | 13 | encoding | BOM, CRLF (`--fix`), não-UTF-8 (ERRO), mojibake | ERRO/AVISO |
+| 14 | interfaces | manifesto, relações, fontes locais e índice derivado (só com o bloco `interfaces` ativo) | ERRO/AVISO |
 
 `--quick` roda 1, 2, 4 e 9. `lint --file` roda 3, 4, 5, 7, 9, 10, 11, 12 e 13 num arquivo só.
 
 
-## 11. Interfaces adaptáveis
+## 12. Interfaces adaptáveis
 
 Extensão opcional desde `0.2.0-local.1`. Configs anteriores continuam válidos. Sem o bloco `interfaces`, o build mantém o roteamento interno; `ativo: false` desliga a extensão.
 
@@ -274,3 +275,24 @@ Escopos `propria`, `externa` e `cortex` apontam a arquivos locais verificáveis.
 5. Para adicionar uma skill, declare seu contrato e relações no manifesto; para adicionar um contexto, registre um componente e associe-o aos perfis pertinentes.
 
 Preferências do interlocutor pertencem ao sistema de memória autorizado, fatos da empresa ao contexto, técnica à skill, voz à ficha editorial e pendências ao briefing. Referencie a origem; não replique dados privados. Correções duráveis exigem evidência e substituição explícita de regra anterior; não são inferidas pelo índice.
+
+## 13. Instalação dentro de um projeto existente
+
+Chaves opcionais do `cortex.config.yaml` para quando o Cortex não é a raiz da pasta, e sim uma subpasta de um projeto que já tem camada própria (regras, skills, `CLAUDE.md`):
+
+| Chave | Efeito |
+|---|---|
+| `projeto.raiz` | raiz do projeto hospedeiro, relativa à raiz do Cortex. Crase em notação do projeto resolve a partir dela (check 5). É opt-in: sem ela (ou a variável `CORTEX_PROJETO`, que tem precedência), só o manifesto de `interfaces` atravessa a raiz do Cortex, e mesmo com ela nada fora da raiz do projeto é aceito |
+| `escopo.excluir` | pastas ou arquivos relativos à raiz que ficam fora do scanner, do índice de links, do check de binários e do hook |
+| `sessao.python` | interpretador dos comandos gerados (`python3`, `py`…); padrão `python3` |
+| `sessao.idiomas_conteudo` | idiomas de entrega ao público final, quando diferem de `sessao.idioma` (documentação num idioma, cliente em outros) |
+
+Comportamento de convivência:
+
+- o `build` só remove wrapper órfão que traga a marca `gerado pelo cortex build`; skills e agentes do projeto em `.claude/` ficam intactos;
+- o `init` não sobrescreve `.claude/settings.json`, `.gitignore` e `.env.example` existentes;
+- `CLAUDE.md`, `AGENTS.md` e demais gerados de raiz que já existam sem a marca são mantidos: o `build` avisa e o check 8 não acusa drift;
+- "gerado" (§8, §9) é decidido pela marca no conteúdo, não pelo nome do arquivo;
+- o hook normaliza caminhos em NFC antes de comparar (o macOS devolve NFD em pastas com acento);
+- com `operacao.ciclo_planejamento: nenhum`, o `build` cria `briefings/avulso/`;
+- com `operacao.destino_material_gerado` diferente de `registro`, o `AGENTS.md` não manda registrar a peça publicada no registro primário.

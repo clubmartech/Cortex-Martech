@@ -49,8 +49,8 @@ validado_em: {{agora}}
 
 Manifesto canônico: `{{interfaces_contexto.manifesto}}` · {{interfaces_contexto.total}} contratos · {{interfaces_contexto.perfis}} perfis. Não carregue o manifesto inteiro na conversa.
 
-1. Busque por tarefa: `python3 _cortex/cli/cortex.py interfaces list --query <termo>` (20 resultados por página; `--offset` continua).
-2. Consulte um contrato: `python3 _cortex/cli/cortex.py interfaces show <id>`; use id completo se houver nomes iguais.
+1. Busque por tarefa: `{{default sessao.python "python3"}} _cortex/cli/cortex.py interfaces list --query <termo>` (20 resultados por página; `--offset` continua).
+2. Consulte um contrato: `{{default sessao.python "python3"}} _cortex/cli/cortex.py interfaces show <id>`; use id completo se houver nomes iguais.
 3. Abra a fonte e somente os componentes pertinentes. Siga relações condicionais preservando briefing, decisões, fontes e autorização.
 
 O índice `{{interfaces_contexto.index}}` é gerado; edite a fonte indicada no manifesto. Memória pessoal, contexto do negócio e voz editorial têm destinos próprios, conforme o componente aplicável. Valide com `interfaces check` e regenere com `build --only interfaces`.
@@ -104,7 +104,7 @@ Caminho de skills, sub-skills e docs: `CATALOGO.md`.
 
 ### GOVERNAR · orçamento 4
 - 🔴 `skill-creator` · `_cortex/CONTRATOS.md` §2
-- 🟡 auditoria → `python3 _cortex/cli/cortex.py doctor` · onboarding/pack → `_cortex/onboarding/questionario.md`
+- 🟡 auditoria → `{{default sessao.python "python3"}} _cortex/cli/cortex.py doctor` · onboarding/pack → `_cortex/onboarding/questionario.md`
 
 ---
 

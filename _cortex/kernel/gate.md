@@ -12,7 +12,7 @@ gatilhos: ["o que é a trava de ativação", "o que preciso declarar antes de re
 requires:
 owner: cortex
 origem: kernel
-validado_em: 2026-10-04
+validado_em: 2026-10-12
 ---
 
 # Gate — contexto suficiente para executar
@@ -71,11 +71,14 @@ Quando houver `interfaces` no config, consulte `interfaces list` e `interfaces s
 
 O método pertence à skill, fatos de negócio ao contexto do projeto, estado da tarefa ao briefing/handoff e preferências pessoais à memória autorizada do interlocutor. Não copie memória privada para artefatos compartilhados nem transforme opinião inferida em crença registrada. A ficha de voz autorizada orienta a escrita em nome da pessoa.
 
+Feedback do interlocutor sobre uma entrega é classificado antes de virar regra: *preferência permanente* (vale para as próximas — vai para a memória autorizada ou, se for do negócio, para o contexto, com evidência), *escolha desta peça* (fica no briefing/handoff), *experimento* (registrado como hipótese a medir) ou *pendência* (fica aberta no handoff). Na dúvida entre permanente e pontual, pergunte; não promova uma escolha isolada a regra.
+
 Adotar um agente significa aplicar seu método; não exige criar outro processo ou delegar a tarefa. Preserve as regras de delegação do ambiente.
 
 ## Histórico
 
 | Data | O que mudou | Papel |
 |---|---|---|
+| 2026-10-12 | §4: classificação do feedback (permanente, desta peça, experimento, pendência) antes de virar regra. | cortex |
 | 2026-10-04 | Adaptação por contexto, leitura seletiva e continuidade do briefing; atualização solicitada pelo mantenedor. | cortex |
 | 2026-10-03 | Versão inicial do kernel, derivada e genericizada da base de origem. | cortex |

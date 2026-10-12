@@ -1,7 +1,7 @@
 ---
 tipo: doc
 id: criatividade-{{item.slug}}
-descricao: "Reúne ângulos, provas, objeções, termos e copies de {{item.nome}} que já foram ao ar e performaram — referência de padrão, não template para copiar."
+descricao: "Reúne ângulos, provas, objeções e copies que já rodaram para `{{item.slug}}` — referência de padrão, não template."
 familia:
 output: nenhum
 canal:

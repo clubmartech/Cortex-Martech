@@ -12,7 +12,7 @@ gatilhos: ["qual a política de uso de IA", "o que não pode entrar no prompt", 
 requires:
 owner: cortex
 origem: kernel
-validado_em: 2026-10-04
+validado_em: 2026-10-12
 ---
 
 # governanca.md — Política de uso, dados, papéis, estrutura e versionamento
@@ -218,10 +218,12 @@ Todo `.md` dentro do escopo nasce com o **frontmatter de 14 campos** (`_cortex/C
 | Valor | Para onde vai | Como |
 |---|---|---|
 | `registro` | o **registro primário** (`integracoes[]` com `registro_primario: true`) — card, tarefa ou página indicada pelo solicitante | o Registrador (`_cortex/kernel/registrador.agent.md`) registra; texto no comentário, nunca HTML; o arquivo final vai para a pasta de rede que o solicitante indicar |
-| `saida` | `_saida/<AAAA-MM>/`, com o nome original | fora do escopo do scanner; a pessoa move para o destino definitivo |
+| `saida-local` | `_saida/<AAAA-MM>/`, com o nome original | fora do escopo do scanner; a pessoa move para o destino definitivo |
 | `chat` | só no chat | nada é gravado; a pessoa copia |
 
 Fluxo obrigatório, em qualquer valor: (1) gere e **apresente integralmente no chat** (§2); (2) **pergunte** o destino quando houver mais de um possível (qual card, qual pasta); (3) grave **só após indicação explícita**; (4) sem indicação, grave em `_saida/<AAAA-MM>/` mantendo o nome original e **avise no chat** que ficou ali, pendente de mover.
+
+**Estados de uma entrega — não confunda:** *entregue no chat ou em `_saida/`* (rascunho local) → *aprovada* (o papel revisor ou o solicitante disse que serve) → *publicada* (está no ar, no canal). Cada estado exige evidência própria: arquivo gravado não é aprovação, aprovação não é publicação. Ao reportar, diga em qual estado a peça está; nunca declare "publicado" sem conferir o canal.
 
 **Exceções — o que *pode* entrar na base:**
 - **Briefing preenchido** a partir de `briefings/_modelo.md` → `briefings/<ciclo>/`, com frontmatter (`output: briefing`), além do registro no registro primário. A raiz de `briefings/` guarda só os modelos.
@@ -278,5 +280,6 @@ Quando a IA gerar algo incorreto, inconsistente, desatualizado ou fora do padrã
 
 | Data | O que mudou | Papel |
 |---|---|---|
+| 2026-10-12 | §8: estados de uma entrega (local, aprovada, publicada) e valor `saida-local` alinhado ao schema. | cortex |
 | 2026-10-04 | Define fontes por tipo de informação e atualização com evidência e regeneração dos derivados. | cortex |
 | 2026-10-03 | Versão inicial do kernel, derivada e genericizada da base de origem. | cortex |

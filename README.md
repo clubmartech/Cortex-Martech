@@ -40,11 +40,13 @@ python3 _cortex/cli/cortex.py doctor
 python3 -m unittest discover -s _cortex/cli/tests -v
 ```
 
-Para adaptar a outro negócio ou interlocutor, troque configuração, manifesto e referências; o núcleo permanece genérico. O formato e o roteiro estão em [_cortex/CONTRATOS.md](./_cortex/CONTRATOS.md), seção 11. Briefings, decisões e autorização acompanham a passagem entre skills. Fatos do negócio e voz pública ficam no projeto; memória pessoal permanece no sistema autorizado.
+Para adaptar a outro negócio ou interlocutor, troque configuração, manifesto e referências; o núcleo permanece genérico. O formato e o roteiro estão em [_cortex/CONTRATOS.md](./_cortex/CONTRATOS.md), seção 12. Briefings, decisões e autorização acompanham a passagem entre skills. Fatos do negócio e voz pública ficam no projeto; memória pessoal permanece no sistema autorizado.
 
 Bibliotecas públicas de skills de marketing serviram de referência para métodos modulares e distribuição entre ferramentas. Nenhuma é dependência de execução.
 
 ## Instalação em 3 passos
+
+> Instalando dentro de um projeto que já tem `.claude/`, `CLAUDE.md` ou acervo próprio? Veja `_cortex/CONTRATOS.md` §13 (`projeto.raiz`, `escopo.excluir`): o Cortex convive sem apagar nem sobrescrever o que é do projeto.
 
 1. **Copie o Cortex para a pasta do seu projeto**
    `python3 install.py "/caminho/da/sua/pasta"` (ou clone este repositório na pasta). Requisito: Python 3.10+; nenhuma dependência externa.

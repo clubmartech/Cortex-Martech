@@ -1,8 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(python3 _cortex/cli/cortex.py *)",
-      "Bash(python3 \"_cortex/cli/cortex.py\" *)"
+      "Bash({{default sessao.python "python3"}} _cortex/cli/cortex.py *)",
+      "Bash({{default sessao.python "python3"}} \"_cortex/cli/cortex.py\" *)"
     ]
   },
   "hooks": {
@@ -11,7 +11,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/session_start.py\""
+            "command": "{{default sessao.python "python3"}} \"$CLAUDE_PROJECT_DIR/.claude/hooks/session_start.py\""
           }
         ]
       }
@@ -22,7 +22,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/pre_tool_use.py\""
+            "command": "{{default sessao.python "python3"}} \"$CLAUDE_PROJECT_DIR/.claude/hooks/pre_tool_use.py\""
           }
         ]
       }

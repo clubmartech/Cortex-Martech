@@ -115,6 +115,17 @@
             "sempre",
             "sob-demanda"
           ]
+        },
+        "python": {
+          "type": "string",
+          "description": "interpretador nos comandos gerados (python3, py…); padrão python3"
+        },
+        "idiomas_conteudo": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "idiomas de entrega ao público final, quando diferem de sessao.idioma"
         }
       }
     },
@@ -656,6 +667,27 @@
         },
         "manifesto": {
           "type": "string"
+        }
+      }
+    },
+    "escopo": {
+      "type": "object",
+      "properties": {
+        "excluir": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "pastas ou arquivos relativos à raiz fora do scanner, do índice de links, do check de binários e do hook"
+        }
+      }
+    },
+    "projeto": {
+      "type": "object",
+      "properties": {
+        "raiz": {
+          "type": "string",
+          "description": "raiz do projeto que hospeda o Cortex, relativa à raiz do Cortex; opt-in para ponteiros fora da raiz do Cortex"
         }
       }
     }
