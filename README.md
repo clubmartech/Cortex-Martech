@@ -17,6 +17,8 @@ O **kernel** (`_cortex/`) é mantido pelo projeto e nunca é sobrescrito pelo se
 
 São sistemas distintos, com dados diferentes. A memória pessoal não substitui este projeto; este projeto não é cópia da memória pessoal. Bibliotecas externas de skills fornecem métodos, não fatos do negócio. Não mover ou fundir essas bases pelo nome ou por trechos parecidos.
 
+A memória pessoal recomendada é o [Personal Cortex](https://github.com/clubmartech/Personal-Cortex). Ele vem por padrão com as **trilhas de raciocínio**: classifica o tipo de cada pedido (viabilidade, desenho, avaliação, execução, publicação…) e a sequência entre eles, em toda conversa e em qualquer projeto, para a resposta mirar o degrau certo. Fica na memória pessoal, e não aqui, porque descreve como **uma pessoa** pede — e esta base é compartilhada pelo time. Os dois convivem: o Cortex do projeto diz *o que* é verdade no negócio; as trilhas dizem *em que degrau* a conversa está.
+
 Quando o projeto hospedeiro mantém um registro de autoridade das fontes (por exemplo, `AI/FONTE-DE-VERDADE.json`), ele é lido relativo à raiz do projeto. O número instalado do núcleo fica somente em `_cortex/kernel/VERSION`; títulos de release documentam história, não substituem essa fonte.
 
 ### Atualização como padrão
