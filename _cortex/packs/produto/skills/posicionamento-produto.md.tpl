@@ -53,7 +53,7 @@ Uma frase, resultado observável, no tempo do público ("fecha o mês sem…", "
 |---|---|---|
 | Dado próprio (base, pesquisa com clientes) | sim, com período e fonte | `[NECESSITA FONTE]` |
 | Case ou depoimento aprovado pelo cliente | sim, com autorização registrada | `[PENDENTE DE CONFIRMAÇÃO: autorização]` |
-| Tela ou demonstração da funcionalidade | sim, para promessa funcional | `[PENDENTE: tela em _assets/]` |
+| Tela ou demonstração da funcionalidade | sim, para promessa funcional | `[PENDENTE]` com o caminho da tela em `_assets/` |
 | Benchmark de mercado | só como contexto, com `[BUSCADO: fonte + ano]` | nunca como prova própria |
 | Opinião interna | não | vira `[HIPÓTESE]` |
 

@@ -19,7 +19,7 @@ validado_em: {{hoje}}
 
 > **Esta matriz nasce vazia de mensagens, de propósito.** Cada célula é preenchida por `mensagens-por-publico`, a partir de um posicionamento aprovado, com prova e fonte. O Redator do pack marketing deriva a peça **da célula**; célula sem prova não vai para peça externa. Atualizada pelo papel `{{papel "product-marketer"}}`; toda mudança vira linha no `## Histórico`.
 
-**Como ler:** uma seção por produto; dentro, uma linha por público do produto. Colunas: dor (na linguagem do público) → benefício (o que muda para ele) → prova (com fonte e status) → objeção e resposta → nunca dizer. Marcadores: `[HIPÓTESE]` dor sem fonte · `[NECESSITA FONTE]` prova ausente · `[PENDENTE: …]` célula por preencher.
+**Como ler:** uma seção por produto; dentro, uma linha por público do produto. Colunas: dor (na linguagem do público) → benefício (o que muda para ele) → prova (com fonte e status) → objeção e resposta → nunca dizer. Marcadores: `[HIPÓTESE]` dor sem fonte · `[NECESSITA FONTE]` prova ausente · `[PENDENTE]` célula por preencher.
 
 ## Públicos (do config)
 

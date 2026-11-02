@@ -17,7 +17,7 @@ validado_em: {{hoje}}
 
 # Linha editorial — {{organizacao.nome}}
 
-> Gerado pelo pack `conteudo`; **o time é dono** (o build não sobrescreve). Preencha os `[PENDENTE: …]` com a prática real e registre no `## Histórico`. Tom e termos vivem em `contexto/brandcenter/brandcenter.md`; aqui fica o que é **editorial**: tema, público, promessa, fonte.
+> Gerado pelo pack `conteudo`; **o time é dono** (o build não sobrescreve). Preencha os campos marcados como pendentes com a prática real e registre no `## Histórico`. Tom e termos vivem em `contexto/brandcenter/brandcenter.md`; aqui fica o que é **editorial**: tema, público, promessa, fonte.
 
 ## 1. O que publicamos e por quê
 

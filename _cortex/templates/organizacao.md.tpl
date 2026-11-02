@@ -17,7 +17,7 @@ validado_em: {{agora}}
 
 # {{organizacao.nome}} — organização
 
-> Gerado pelo `cortex init` a partir de `cortex.config.yaml`. **Este arquivo é do time:** o `build` não o sobrescreve (só com `--first-run`). Preencha os `[PENDENTE: …]` e registre no `## Histórico`. Dados estruturais (slugs, canais, papéis) vivem no config — mude lá e rode `build`.
+> Gerado pelo `cortex init` a partir de `cortex.config.yaml`. **Este arquivo é do time:** o `build` não o sobrescreve (só com `--first-run`). Preencha os campos marcados como pendentes e registre no `## Histórico`. Dados estruturais (slugs, canais, papéis) vivem no config — mude lá e rode `build`.
 
 ## 1. Organização
 

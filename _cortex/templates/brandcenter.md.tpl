@@ -19,7 +19,7 @@ validado_em: {{agora}}
 
 > 🚪 **Este arquivo é INSUMO, não ponto de partida.** A porta de entrada de todo pedido é o Maestro (`AGENTS.md`). Sou a referência única de marca e linguagem, **carregada por todo agente antes de produzir qualquer coisa** — não inicio produção nem dispenso o gate (`_cortex/kernel/gate.md`).
 > **Quando usar:** sempre que um agente precisar confirmar quem somos, como falamos e o que nunca dizemos. Para números e fatos, confirme na fonte mais próxima (`_cortex/kernel/anti-alucinacao.md`).
-> Gerado pelo `cortex init`; o time edita (o `build` não sobrescreve). Preencha os `[PENDENTE: …]`.
+> Gerado pelo `cortex init`; o time edita (o `build` não sobrescreve). Preencha os campos marcados como pendentes.
 
 ## 1. Papel
 

@@ -42,7 +42,7 @@ Produtos cobertos (slugs){{#if integracao:crm}} · etapas como estão no CRM{{/i
 | Etapa | Entra quando (evento observável) | Campo ou evento na fonte | Sai quando | Responsável (papel) | Granularidade |
 |---|---|---|---|---|---|
 
-Critério é **evento observável** ("negócio aberto no CRM com campo X preenchido"), não julgamento ("lead bom"). Etapa sem evento na fonte → `[PENDENTE: instrumentar]`.
+Critério é **evento observável** ("negócio aberto no CRM com campo X preenchido"), não julgamento ("lead bom"). Etapa sem evento na fonte → `[PENDENTE]` com a nota «instrumentar».
 
 **Passo 3 — Declarar as exclusões.** O que sai da contagem em todas as etapas (teste, duplicado, interno, descarte administrativo) e **onde a regra vive**. Sem isso, ninguém reproduz o painel.
 

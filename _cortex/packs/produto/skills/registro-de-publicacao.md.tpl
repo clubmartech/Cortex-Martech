@@ -52,7 +52,7 @@ Buscar no índice por funcionalidade e por título. Publicação já registrada 
 | Validado por | papel |
 | Vale como prova? | sim · não · `[PENDENTE DE CONFIRMAÇÃO]` — para o Product Marketer |
 
-Campo sem informação → `[PENDENTE: campo]`, nunca vazio silencioso.
+Campo sem informação → `[PENDENTE]` seguido do nome do campo, nunca vazio silencioso.
 
 ### Passo 3 — Fechar o ciclo
 
