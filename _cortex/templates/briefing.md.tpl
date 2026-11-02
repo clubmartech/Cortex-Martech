@@ -47,10 +47,11 @@ validado_em: {{agora}}
 {...}
 ➡️ **Em uma frase:** {o quê fazer, para quem, com qual prova}
 
-## 02. Objetivo
-*O que esta demanda precisa gerar ou tornar claro para o público?*
+## 02. Objetivo e transformação (Altitude & Verbos)
+*O que esta demanda precisa gerar ou tornar claro para o público? Qual a transformação de julgamento/ação esperada (verbos da mudança em vez de artefato substantivo)? O que precisa acontecer depois (meta além da meta / decisão destravada)?*
 {...}
-➡️ **Em uma frase:** {...}
+➡️ **Em uma frase:** {verbo da ação + para quem + com qual resultado prático}
+➡️ **Altitude (meta além da meta):** {qual decisão urgente destrava ou se é oportunidade de fluxo/loop contínuo}
 
 ## 03. Público prioritário
 *Para quem estamos falando? (slug de `publicos[]`)*
@@ -86,6 +87,7 @@ validado_em: {{agora}}
 **B. Match com o direcional**
 - Sustentado por: {...}
 - Lacuna ou divergência a resolver com o estrategista: {...}
+- Checagem adversarial de premissas (Depth): {que crença ou premissa do negócio precisa ser confrontada ou refutada com os dados brutos?}
 
 **C. Correlações encontradas na base**
 - Oferta / módulos: {caminho}

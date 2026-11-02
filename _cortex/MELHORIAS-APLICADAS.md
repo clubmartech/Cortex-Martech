@@ -92,3 +92,19 @@ Pack `visual` com três agentes (curador visual, diretor de arte, arquiteto de c
 | Onboarding sem perguntas visuais | bloco B11 e bloco `visual` no schema | `onboarding/questionario.md`, schema |
 
 Verificação: 42 testes; instalação limpa com o pack, build e doctor sem erro; fluxo radar → triagem → acervo → tokens → consistência exercitado; galeria executada em DOM simulado. O pack não gera arte: as skills de produção continuam por conta dos executores de cada instância.
+
+## 2026-10-29 — retomada entre sessões
+
+Por solicitação do mantenedor, o gate §4.1 aponta o protocolo operacional de retomada do contrato comum entre skills. O resumo preserva evidências, autorização e estado; a retomada exige releitura dos alvos e evita repetição de chamadas externas com efeito. Não adiciona agente ou memória compartilhada de preferências pessoais.
+
+## 2026-11-02 — 0.4.1, mescla da distribuição com a instância
+
+Duas linhas evoluíram em paralelo depois de 0.3.0: a distribuição ganhou o pack `visual` e a classificação do feedback (0.4.0); a instância ganhou altitude e verbos de transformação, rigor anti-inflação e retomada entre sessões. Esta versão junta as duas.
+
+| Problema | Alteração | Onde |
+|---|---|---|
+| Descoberta e briefing pediam o formato, não a mudança esperada | perguntas de transformação (verbos) e altitude (meta além da meta); campos no cartão e no template | `kernel/descoberta.md`, `templates/briefing.md.tpl` |
+| Análise longa confundida com análise funda | §5.1: instrumento real, checagem adversarial das premissas, dado bruto e juiz externo | `kernel/anti-alucinacao.md` |
+| Postura crítica sem ambição | gate §1.1 inclui altitude e verbos | `kernel/gate.md` |
+| Retomada de sessão sem protocolo | gate §4.1 | `kernel/gate.md` |
+| Revisor tratava contraste de postura autorizado como vício | ressalva condicionada ao que o brandcenter da instância autorizar | `kernel/revisor.agent.md` |

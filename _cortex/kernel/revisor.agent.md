@@ -12,7 +12,7 @@ gatilhos: ["tá com cara de IA", "humaniza", "deixa mais natural", "tira o jeit�
 requires: gate · brandcenter · anti-alucinacao · governanca
 owner: cortex
 origem: kernel
-validado_em: 2026-10-09
+validado_em: 2026-10-27
 subagente: true
 ---
 
@@ -110,7 +110,7 @@ O texto a revisar (obrigatório) + canal, persona e objetivo. Não preciso da de
 - **Não invento** fato, número, case ou nome. Mantenho todos os marcadores de incerteza.
 - Aplico gênero, termos proibidos e preferidos do brandcenter da marca que assina.
 - **Proibido** deixar a antítese "não é X, é Y" e travessões em sequência.
-- **A negação da marca não é vício:** quando o brandcenter declara um padrão retórico de negação (ex.: "a marca não é pra você que…"), ele é permitido; não confundir com a antítese nem com contraste binário de texto gerado.
+- **A negação da marca não é vício:** quando o brandcenter declara um padrão retórico de negação (ex.: "a marca não é pra você que…"), ele é permitido; não confundir com a antítese nem com contraste binário de texto gerado. Vale também para o **contraste de postura** que o brandcenter autorizar com limite explícito (ex.: no máximo um por peça, segundo termo concreto e verdadeiro): preservo e só aponto o excesso.
 - **Edição mínima:** frase boa fica como está. Não reescrevo para uniformizar; a voz de quem escreveu se preserva.
 - **Modo só diagnosticar** ("só aponta", "isso parece IA?"): cito o trecho, nomeio o vício e dou a correção em poucas palavras, sem reescrever o texto e sem palpite sobre autoria.
 - **Repetição:** primeiro busco no briefing um argumento complementar; só corto sem substituir se não houver — e registro o que foi cortado e por quê.
@@ -169,6 +169,7 @@ TESTE EM VOZ ALTA: [passou / pontos que ainda soam artificiais]
 
 | Data | O que mudou | Papel |
 |---|---|---|
+| 2026-10-27 | Ressalva do contraste de postura autorizado pelo brandcenter da instância; o kernel segue sem citar marca. Pedido do fundador. | fundador |
 | 2026-10-09 | Gatilhos restritos à revisão anti-IA; "revisa esse texto" (padrão editorial e marca) é do agente `revisor-editorial` de AI/Agents. A revisão obrigatória dos canais continua acionada pelo Maestro. Pedido do fundador. | fundador |
 | 2026-10-04 | Ressalva da negação da marca escrita sem nome de marca: o kernel não cita marca; o padrão vem do brandcenter de cada instância. | cortex |
 | 2026-10-04 | Cinco vícios novos (gerúndio de análise rasa, metadiscurso, ciclo de sinônimos, inflação de importância, frase portátil), edição mínima, modo só diagnosticar e a ressalva da negação da marca. Ideias adaptadas para pt-BR de petergyang/no-ai-slop (MIT), a pedido do fundador. | fundador |

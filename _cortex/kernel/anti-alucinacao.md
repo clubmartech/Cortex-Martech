@@ -12,7 +12,7 @@ gatilhos: ["posso inventar esse número", "o que faço quando não tenho o dado"
 requires:
 owner: cortex
 origem: kernel
-validado_em: 2026-10-03
+validado_em: 2026-10-18
 ---
 
 # anti-alucinacao.md — Protocolo de prevenção de alucinação
@@ -115,6 +115,15 @@ Se um dado suspeito já foi gerado:
 3. Se houver dado correto com fonte, usá-lo.
 4. Se a causa for arquivo de referência desatualizado ou incompleto, reportar via `_cortex/kernel/governanca.md` §11 ("Sinalizar problemas").
 
+### 5.1 Profundidade metodológica e checagem adversarial (anti-inflação)
+
+Ao aprofundar uma análise, estratégia ou plano, não confunda profundidade com inflação de texto (mais palavras, adjetivos ou tabelas cosméticas). Aprofundamento real exige rigor metodológico:
+
+1. **Instrumentos de ponta em vez de texto descritivo:** Se a tarefa exige inferência sobre dados, comportamento ou métricas, use os instrumentos de especialistas (consultas a banco de dados, execução de código Python, modelagem estatística via MCPs ou scripts), e não suposições em linguagem natural.
+2. **Checagem adversarial de premissas (*Adversarial check*):** Antes de aceitar como verdade uma crença ou hipótese da casa (ex.: "a causa do churn é o onboarding", "o canal X não performa por criativo fraco"), teste ativamente a refutação dessa hipótese contra os dados brutos e logs disponíveis.
+3. **Matéria-prima bruta (*Raw data*):** Sempre que houver conector ou base disponível, parta dos eventos e dados mais primários possíveis em vez de depender de agregados pré-mastigados.
+4. **Juiz externo (*Outside Judge*):** O agente que executa nunca aprova o próprio trabalho. Validações quantitativas e lógicas devem se basear em testes executáveis, scripts de verificação ou no agente `verificador` / revisores autorizados.
+
 ---
 
 ## 6. Perguntas de verificação
@@ -132,6 +141,8 @@ Responder internamente antes de gerar qualquer resposta:
 - Se consultei conector: cada tabela, coluna, procedimento ou filtro que estou citando foi **confirmado na ficha da integração**, e não deduzido pelo nome?
 - Todo número que veio de conector está com `[CONECTOR: sistema · data]`, e nenhum número autoral está usando esse marcador emprestado?
 - Cada trecho não verificado está marcado com o marcador oficial correto (§4.1)?
+- Em análises e diagnósticos: usei instrumentos reais de especialista (código/dados brutos) ou gerei texto inflado e superficial (§5.1)?
+- Tentei adversariamente checar/refutar as premissas assumidas contra dados objetivos (§5.1)?
 
 Se qualquer resposta indicar lacuna ou dúvida crítica: interromper e aplicar a §5.
 
@@ -154,4 +165,5 @@ Se qualquer resposta indicar lacuna ou dúvida crítica: interromper e aplicar a
 
 | Data | O que mudou | Papel |
 |---|---|---|
+| 2026-10-18 | Incorporadas diretrizes de profundidade metodológica (anti-inflação de texto), checagem adversarial de premissas e juiz externo. | cortex |
 | 2026-10-03 | Versão inicial do kernel, derivada e genericizada da base de origem. | cortex |

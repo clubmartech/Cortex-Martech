@@ -12,7 +12,7 @@ gatilhos: ["o que é a trava de ativação", "o que preciso declarar antes de re
 requires:
 owner: cortex
 origem: kernel
-validado_em: 2026-10-12
+validado_em: 2026-11-02
 ---
 
 # Gate — contexto suficiente para executar
@@ -32,7 +32,7 @@ Ausência de arquivo essencial: explique a lacuna, não invente seu conteúdo e 
 
 ### 1.1 Postura crítica proporcional
 
-Avalie objetivo, evidência e consequência. Em criação ou estratégia, exponha conflitos que mudem a entrega. Em operação, confira alvo, escopo e reversibilidade. Em consulta, responda diretamente. Se não houver conflito material, execute; não invente objeções para cumprir uma etapa.
+Avalie objetivo, evidência e consequência. Em criação ou estratégia, exponha conflitos que mudem a entrega, busque a meta além da meta (Altitude) e foque na ação/julgamento concreto esperado do público (Verbos em vez de artefato substantivo). Em análise e diagnóstico, exija rigor de especialista (instrumentos reais e checagem adversarial de premissas contra dados brutos, `_cortex/kernel/anti-alucinacao.md` §5.1) em vez de inflação de texto descritivo. Em operação, confira alvo, escopo e reversibilidade. Em consulta, responda diretamente. Se não houver conflito material, execute; não invente objeções para cumprir uma etapa.
 
 ### 1.2 Consultas e integrações
 
@@ -71,14 +71,21 @@ Quando houver `interfaces` no config, consulte `interfaces list` e `interfaces s
 
 O método pertence à skill, fatos de negócio ao contexto do projeto, estado da tarefa ao briefing/handoff e preferências pessoais à memória autorizada do interlocutor. Não copie memória privada para artefatos compartilhados nem transforme opinião inferida em crença registrada. A ficha de voz autorizada orienta a escrita em nome da pessoa.
 
+Adotar um agente significa aplicar seu método; não exige criar outro processo ou delegar a tarefa. Preserve as regras de delegação do ambiente.
+
 Feedback do interlocutor sobre uma entrega é classificado antes de virar regra: *preferência permanente* (vale para as próximas — vai para a memória autorizada ou, se for do negócio, para o contexto, com evidência), *escolha desta peça* (fica no briefing/handoff), *experimento* (registrado como hipótese a medir) ou *pendência* (fica aberta no handoff). Na dúvida entre permanente e pontual, pergunte; não promova uma escolha isolada a regra.
 
-Adotar um agente significa aplicar seu método; não exige criar outro processo ou delegar a tarefa. Preserve as regras de delegação do ambiente.
+### 4.1 Retomar outra sessão
+
+Use o protocolo de retomada do contrato comum entre skills, acessível por `interfaces` (§4). O resumo deve preservar objetivo, critério de pronto, decisões e autorização com origem, arquivos alterados, verificações executadas e limitações, bloqueios e próximo passo. Entregue na conversa quando não houver destino de arquivo solicitado. Antes de continuar, releia os arquivos afetados e confirme o estado atual; não repita chamadas externas com efeito só porque um resumo não contém a resposta. Segredos, memória privada e URLs de acesso temporário não entram no handoff. Tarefa curta já concluída dispensa resumo formal.
 
 ## Histórico
 
 | Data | O que mudou | Papel |
 |---|---|---|
+| 2026-11-02 | Mescla da distribuição com a instância: classificação do feedback (§4) e retomada (§4.1) no mesmo arquivo. | cortex |
+| 2026-10-29 | Retomada operacional vinculada ao contrato comum, com verificação do estado real e preservação do escopo autorizado. | cortex |
+| 2026-10-18 | Postura crítica proporcional reforçada com altitude, foco em verbos de transformação e rigor analítico anti-inflação. | cortex |
 | 2026-10-12 | §4: classificação do feedback (permanente, desta peça, experimento, pendência) antes de virar regra. | cortex |
 | 2026-10-04 | Adaptação por contexto, leitura seletiva e continuidade do briefing; atualização solicitada pelo mantenedor. | cortex |
 | 2026-10-03 | Versão inicial do kernel, derivada e genericizada da base de origem. | cortex |

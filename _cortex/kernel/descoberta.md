@@ -12,7 +12,7 @@ gatilhos: ["o que preciso perguntar antes de produzir", "faz a descoberta comigo
 requires: entrevistador · gate · anti-alucinacao
 owner: cortex
 origem: kernel
-validado_em: 2026-10-04
+validado_em: 2026-10-18
 ---
 
 # Descoberta — completar o briefing antes de produzir
@@ -48,12 +48,14 @@ Estas são as perguntas que separam peça específica de peça genérica. **Perg
 | # | Pergunta | Por que muda a peça |
 |---|---|---|
 | 1 | **Ângulo / ideia central:** qual é a ideia, em uma frase? O que esta peça diz que ninguém mais diz? | Sem ângulo, o texto vira correto e invisível |
-| 2 | **Prova concreta:** que dado, case ou fonte sustenta o argumento? (ou: não há prova ainda) | Especificidade vence generalidade; sem prova, vira promessa vaga |
-| 3 | **A única coisa que não pode faltar** nesta peça | Define a prioridade quando algo precisa ser cortado |
-| 4 | **O que NÃO pode aparecer** (tema, palavra, abordagem, concorrente) | Evita retrabalho e desvio de marca |
-| 5 | **Referência que você admira** (uma peça ou empresa cujo tom você quer) | Calibra tom melhor que qualquer adjetivo |
-| 6 | **Nível de consciência do público** sobre o problema e a solução | Define quão direto ou educativo é o texto |
-| 7 | **Restrições** (extensão, prazo, formato, obrigatórios) | Evita entrega fora do que era possível usar |
+| 2 | **Transformação (verbos em vez de substantivos):** qual a ação concreta ou mudança de julgamento esperada do público? (ex.: em vez de "um deck", "fazer a liderança decidir a alocação de verba em 30 min") | Focar no formato gera preenchimento burocrático; focar no verbo gera eficácia |
+| 3 | **Altitude (meta além da meta):** o que precisa acontecer depois que esta entrega for concluída? Que decisão urgente destrava? É demanda avulsa ou demanda um sistema/loop durável? | Evita micro-tarefas isoladas e identifica oportunidades de monitoramento contínuo |
+| 4 | **Prova concreta:** que dado, case ou fonte sustenta o argumento? (ou: não há prova ainda) | Especificidade vence generalidade; sem prova, vira promessa vaga |
+| 5 | **A única coisa que não pode faltar** nesta peça | Define a prioridade quando algo precisa ser cortado |
+| 6 | **O que NÃO pode aparecer** (tema, palavra, abordagem, concorrente) | Evita retrabalho e desvio de marca |
+| 7 | **Referência que você admira** (uma peça ou empresa cujo tom você quer) | Calibra tom melhor que qualquer adjetivo |
+| 8 | **Nível de consciência do público** sobre o problema e a solução | Define quão direto ou educativo é o texto |
+| 9 | **Restrições** (extensão, prazo, formato, obrigatórios) | Evita entrega fora do que era possível usar |
 
 ### 3. Bancos de perguntas genéricos
 
@@ -92,6 +94,8 @@ Este é o modelo canônico de resumo para tarefas complexas ou passagem entre sk
 ```
 BRIEFING VALIDADO ✅ — [tipo de tarefa]
 - Objetivo:
+- Altitude (meta além da meta / decisão destravada):
+- Transformação esperada (verbos da mudança de julgamento/ação):
 - Marca que assina / que divulga:
 - Público / persona (cargo + dor):
 - Oferta / tema central:
@@ -116,5 +120,6 @@ Marcadores: [VALIDADO] / [INFORMADO PELO CLIENTE] / [PENDENTE DE CONFIRMAÇÃO] 
 
 | Data | O que mudou | Papel |
 |---|---|---|
+| 2026-10-18 | Incorporadas diretrizes de ambição: elevação de altitude (meta além da meta) e foco em verbos de transformação. | cortex |
 | 2026-10-04 | Descoberta proporcional com reaproveitamento de briefing e autorização. | cortex |
 | 2026-10-03 | Versão inicial do kernel, derivada e genericizada da base de origem. | cortex |
