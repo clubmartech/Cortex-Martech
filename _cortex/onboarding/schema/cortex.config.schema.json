@@ -116,6 +116,14 @@
             "sob-demanda"
           ]
         },
+        "fundacao": {
+          "type": "string",
+          "enum": [
+            "sob-demanda",
+            "sempre"
+          ],
+          "description": "sob-demanda (padrão): CLAUDE.md não importa brandcenter e anti-alucinação; sempre: importa em toda sessão"
+        },
         "python": {
           "type": "string",
           "description": "interpretador nos comandos gerados (python3, py…); padrão python3"

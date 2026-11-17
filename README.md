@@ -99,7 +99,7 @@ raiz/
 
 ## Como funciona no Claude Code × em outras IAs
 
-- **Claude Code:** `CLAUDE.md` importa `AGENTS.md`, o gate e o brandcenter. O hook `SessionStart` roda `doctor --quick` e injeta `_cortex/.build/boot.md` (resumo do config, famílias ativas, agentes). O hook `PreToolUse` nega leitura de `_arquivo/`, nega edição de arquivos gerados, roda `lint` no conteúdo de todo `.md` antes de gravar e pede confirmação para arquivo novo quando `operacao.criar_arquivo_sem_pedido` é `false`. As skills `/cortex-init`, `/cortex-doctor`, `/cortex-build` e `/cortex-new` guiam a IA; cada skill da base vira um wrapper em `.claude/skills/<id>/`.
+- **Claude Code:** `CLAUDE.md` importa `AGENTS.md` e o gate; brandcenter e anti-alucinação são abertos sob demanda (com `sessao.fundacao: sempre`, entram por `@import` em toda sessão). O hook `SessionStart` roda `doctor --quick` e injeta `_cortex/.build/boot.md` (resumo do config, famílias ativas, agentes). O hook `PreToolUse` nega leitura de `_arquivo/`, nega edição de arquivos gerados, roda `lint` no conteúdo de todo `.md` antes de gravar e pede confirmação para arquivo novo quando `operacao.criar_arquivo_sem_pedido` é `false`. As skills `/cortex-init`, `/cortex-doctor`, `/cortex-build` e `/cortex-new` guiam a IA; cada skill da base vira um wrapper em `.claude/skills/<id>/`.
 - **Outras IAs (Cowork, Codex, chat):** nada carrega sozinho. Cole o conteúdo de `ABERTURA-SESSAO.md` como primeira mensagem; ele manda a IA abrir `AGENTS.md` primeiro; ele diz o que ler (gate → `ROTAS.md` → pacote da família) e aplica a declaração de leituras configurada. O `AGENTS.md` §0 também cobre o onboarding em chat quando não há Python.
 
 ## Como criar uma skill ou um pack

@@ -190,7 +190,7 @@ Nome de arquivo de template pode conter `{{item.slug}}` (ex.: `criatividade-{{it
 |---|---|---|
 | `AGENTS.md` | `AGENTS.md.tpl` | canônico multi-IA: §0 onboarding/fallback em chat, §1 gate `LIDOS:`, §2 fluxo de 8 passos, §3 roteamento (aponta `ROTAS.md`), §4 destinos e permissões, §5 manutenção |
 | `ABERTURA-SESSAO.md` | `ABERTURA-SESSAO.md.tpl` | texto de abertura para ferramentas sem hook/`@import` (cola-se como 1ª mensagem); contém o gate, a regra da oferta e um resumo do contexto |
-| `CLAUDE.md` | `CLAUDE.md.tpl` | ≤30 linhas, `@AGENTS.md`, `@_cortex/kernel/gate.md`, `@contexto/brandcenter/brandcenter.md`, `@_cortex/kernel/anti-alucinacao.md` |
+| `CLAUDE.md` | `CLAUDE.md.tpl` | ≤30 linhas, `@AGENTS.md`, `@_cortex/kernel/gate.md`; com `sessao.fundacao: sempre`, também `@contexto/brandcenter/brandcenter.md` e `@_cortex/kernel/anti-alucinacao.md` |
 | `ROTAS.md` | `ROTAS.md.tpl` | §0 uso · §1 classificador (ativas) · §2 agentes id→arquivo · §2.x rotas por sub-família · §3 modificadores ativos · §4 desempates · §5 inativas |
 | `CATALOGO.md` | `CATALOGO.md.tpl` | §0 vocabulários · tabela `id · caminho · KB · ~tokens · tipo · família · requires · consumido por` · âncoras dos > 35 KB |
 | `_cortex/.build/boot.md` | `boot.md.tpl` | ≤3 KB injetado pelo SessionStart |
@@ -265,7 +265,9 @@ Escopos `propria`, `externa` e `cortex` apontam a arquivos locais verificáveis.
 
 `build` valida a extensão antes de escrever e gera `_cortex/.build/interfaces-index.json`. `build --only interfaces` atualiza só esse índice. O índice é descartável e não é uma segunda fonte de verdade. Mudanças em perfis/quantidades também aparecem em rotas/boot após build completo. O check 14 do doctor detecta referência inválida e índice ausente ou divergente. Validação estrutural não comprova a qualidade criativa nem executa as ferramentas citadas.
 
-`sessao.declaracao_leituras` aceita `sempre` (compatibilidade) e `sob-demanda`. Ambos exigem leitura suficiente; apenas a apresentação muda. Os critérios de briefing e continuidade vivem em `_cortex/kernel/gate.md` e `_cortex/kernel/descoberta.md`.
+`sessao.declaracao_leituras` aceita `sempre` (compatibilidade) e `sob-demanda`. Ambos exigem leitura suficiente; apenas a apresentação muda.
+
+`sessao.fundacao` aceita `sob-demanda` (padrão, também quando ausente) e `sempre`. Em `sob-demanda`, o `CLAUDE.md` importa só `AGENTS.md` e o gate, e manda abrir anti-alucinação antes de afirmar fato ou número e o brandcenter antes de texto ou peça pública (gate §2). Em `sempre`, os dois entram por `@import` em toda sessão, o que custa da ordem de 10 mil tokens por chamada numa instância com marca documentada. Os critérios de briefing e continuidade vivem em `_cortex/kernel/gate.md` e `_cortex/kernel/descoberta.md`.
 
 ### Adaptação a outro projeto
 

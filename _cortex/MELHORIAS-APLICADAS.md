@@ -108,3 +108,14 @@ Duas linhas evoluíram em paralelo depois de 0.3.0: a distribuição ganhou o pa
 | Postura crítica sem ambição | gate §1.1 inclui altitude e verbos | `kernel/gate.md` |
 | Retomada de sessão sem protocolo | gate §4.1 | `kernel/gate.md` |
 | Revisor tratava contraste de postura autorizado como vício | ressalva condicionada ao que o brandcenter da instância autorizar | `kernel/revisor.agent.md` |
+
+## 2026-11-17 — 0.4.2, fundação sob demanda no Claude Code
+
+Medição numa instância com marca documentada: os `@import` de brandcenter e anti-alucinação somavam cerca de 11 mil tokens em toda chamada, inclusive em tarefa técnica ou consulta, onde o gate §2 já dizia para carregar a fundação conforme a tarefa.
+
+| Problema | Alteração | Onde |
+|---|---|---|
+| Fundação inteira carregada em toda chamada do Claude Code | `sessao.fundacao: sob-demanda` (padrão) importa só `AGENTS.md` e o gate; o `CLAUDE.md` manda abrir anti-alucinação antes de afirmar fato ou número e o brandcenter antes de texto ou peça pública | `templates/CLAUDE.md.tpl`, schema, `CONTRATOS.md` §8 |
+| Quem prefere o comportamento anterior | `sessao.fundacao: sempre` restaura os quatro `@import` | idem |
+
+Verificação: testes do CLI e build em projeto limpo com os dois valores.

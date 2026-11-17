@@ -156,6 +156,21 @@ class TemplateTests(unittest.TestCase):
                 if name=='AGENTS':
                     self.assertIn(organization,out)
                     self.assertEqual('A declaração de leituras é sob demanda' in out,mode=='sob-demanda')
+    def test_fundacao_sob_demanda_e_sempre(self):
+        cfg=config_base();cfg.pop('interfaces',None)
+        source=(ROOT/'_cortex/templates/CLAUDE.md.tpl').read_text()
+        for mode in (None,'sob-demanda','sempre'):
+            if mode is None: cfg['sessao'].pop('fundacao',None)
+            else: cfg['sessao']['fundacao']=mode
+            out,missing=render.render(source,ctx.montar(ROOT,cfg),cfg)
+            self.assertEqual(missing,[])
+            imports=[l for l in out.splitlines() if l.startswith('@')]
+            if mode=='sempre':
+                self.assertEqual(imports,['@AGENTS.md','@_cortex/kernel/gate.md','@contexto/brandcenter/brandcenter.md','@_cortex/kernel/anti-alucinacao.md'])
+            else:
+                self.assertEqual(imports,['@AGENTS.md','@_cortex/kernel/gate.md'])
+                self.assertIn('entram sob demanda',out)
+        self.assertLessEqual(len(out.splitlines()),40)
     def test_fresh_project_without_extension_builds_twice(self):
         with tempfile.TemporaryDirectory() as temp:
             root=Path(temp)
@@ -174,6 +189,8 @@ class TemplateTests(unittest.TestCase):
         cfg.pop('interfaces',None);cfg['sessao'].pop('declaracao_leituras',None)
         self.assertEqual(config.validar(cfg,schema),[])
         cfg['sessao']['declaracao_leituras']='unknown';self.assertTrue(config.validar(cfg,schema))
+        cfg['sessao']['declaracao_leituras']='sempre';cfg['sessao']['fundacao']='talvez';self.assertTrue(config.validar(cfg,schema))
+        cfg['sessao']['fundacao']='sempre';self.assertEqual(config.validar(cfg,schema),[])
 
 class NomenclaturaTests(unittest.TestCase):
     def test_sufixo_numerico_so_e_copia_com_irmao(self):
