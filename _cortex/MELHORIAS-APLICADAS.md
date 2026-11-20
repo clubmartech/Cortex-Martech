@@ -119,3 +119,16 @@ Medição numa instância com marca documentada: os `@import` de brandcenter e a
 | Quem prefere o comportamento anterior | `sessao.fundacao: sempre` restaura os quatro `@import` | idem |
 
 Verificação: testes do CLI e build em projeto limpo com os dois valores.
+
+## 2026-11-19 — 0.4.3, material de terceiros e agentes sem envio
+
+Varredura numa instância com cerca de 250 skills de terceiros: nenhum comando malicioso, mas crédito e autopromoção do autor espalhados no corpo das skills, testes e evals do repositório de origem copiados junto, telemetria e feedback automáticos ao fornecedor ligados por padrão, chave de API sugerida em `~/.zshrc` e agentes com acesso a ferramentas de envio de mensagem.
+
+| Problema | Alteração | Onde |
+|---|---|---|
+| Crédito, link de origem e autopromoção no corpo da skill de terceiro | corpo limpo; procedência só na ficha de origem; `LICENSE` preservado | `kernel/skill-creator.md` §7 |
+| Testes, evals e arquivos de repositório copiados com o pacote | não entram | idem |
+| Telemetria e feedback ao fornecedor por padrão | desligados; envio só a pedido explícito | idem |
+| Agente com ferramenta de e-mail, chat ou publicação | ferramentas de envio fora do agente (`disallowedTools` quando o runtime aceita) | idem |
+
+Verificação: testes do CLI, `doctor` e `build` numa instância.

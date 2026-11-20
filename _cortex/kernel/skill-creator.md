@@ -12,7 +12,7 @@ gatilhos: ["quero criar uma skill no Cortex", "documenta esse processo como skil
 requires: gate · governanca · anti-alucinacao
 owner: cortex
 origem: kernel
-validado_em: 2026-10-09
+validado_em: 2026-11-19
 ---
 
 > 🔒 **Chegou aqui direto?** Esta skill é transversal e normalmente é acionada pelo Maestro (família GOVERNAR), que carrega a fundação antes de passar para cá. Abrir só este arquivo pula a trava de ativação (`_cortex/kernel/gate.md`). **Volte ao agente antes de produzir.**
@@ -37,6 +37,7 @@ validado_em: 2026-10-09
 - [4. Regra de gatilhos](#4-regra-de-gatilhos)
 - [5. Boas práticas anti-alucinação dentro de uma skill](#5-boas-práticas-anti-alucinação-dentro-de-uma-skill)
 - [6. Checklist de entrega](#6-checklist-de-entrega)
+- [7. Material de terceiros e agentes](#7-material-de-terceiros-e-agentes)
 - [Output esperado](#output-esperado)
 
 ---
@@ -189,9 +190,24 @@ Ao escrever ou revisar as instruções de uma skill, aplique:
 - [ ] `requires` começa pelo agente que roteia (skill) e o agente aponta de volta (§3).
 - [ ] Seções obrigatórias do tipo presentes (§1, §2).
 - [ ] Técnicas anti-alucinação aplicadas nas instruções (§5), ficha de integração antes de conector.
+- [ ] Material de terceiros e permissões do agente conforme §7.
 - [ ] Arquivo apresentado no chat e aprovado antes de gravar.
 - [ ] `cortex lint --file` sem erro · `cortex build` rodado · arquivo aparece no `ROTAS.md` e no `CATALOGO.md`.
 - [ ] Linha no `## Histórico` com ratificação (concedida ou PENDENTE) · `validado_em` = data da linha · commit, se `governanca.git`.
+
+---
+
+## 7. Material de terceiros e agentes
+
+Skill, agente ou referência que veio de fora é **adaptada para uso interno**: entra no padrão do Cortex e não carrega bagagem do autor original.
+
+- **Corpo limpo.** Sem autoria, crédito, "adaptado de", "inspirado em", link para o repositório de origem, nota de contribuidor, rodapé promocional ou pedido de patrocínio. Link para arquivo do pacote vira caminho local; sem cópia local, fica só o texto.
+- **Procedência fora do corpo.** Fonte, commit, licença, data e o que ficou de fora vão numa ficha de origem ao lado do pacote, que a IA não carrega na tarefa. Os arquivos `LICENSE` ficam: MIT e Apache exigem o aviso junto da cópia.
+- **Sem extras.** Testes, evals, changelog e arquivos de repositório do autor (`.gitignore`, README vazio) não entram.
+- **Fica o que é funcional.** Fonte de número ou fato (exigência de `anti-alucinacao.md`), regra de crédito e licença de mídia usada em peça, e comando que chama a ferramenta de terceiro.
+- **Licença antes de conteúdo.** Sem licença = todos os direitos reservados: extraia o método e reescreva, sem copiar texto. Pesos ou mídia de uso não comercial não entram em peça publicada.
+- **Fornecedor não recebe dado sozinho.** Telemetria de ferramenta de terceiro fica desligada; feedback, relatório de bug ou envio ao fornecedor só a pedido explícito.
+- **Agente sem envio.** Agente não envia mensagem nem publica: ferramentas de e-mail, chat e publicação ficam fora da lista dele (`disallowedTools` no wrapper, quando o runtime aceita). Enviar e publicar é do humano (`governanca.md` §1).
 
 ---
 
@@ -215,5 +231,6 @@ Para correção de skill: o diagnóstico (a, b ou c do Processo §5) em uma fras
 
 | Data | O que mudou | Papel |
 |---|---|---|
+| 2026-11-19 | §7: material de terceiros adaptado para uso interno (corpo sem crédito, procedência na ficha, `LICENSE` preservado, sem extras), telemetria de fornecedor desligada e agente sem envio. Pedido do fundador. | fundador |
 | 2026-10-09 | Gatilhos restritos a skills e agentes do Cortex; skill própria do drive é da skill `skills-e-agentes`. Pedido do fundador. | fundador |
 | 2026-10-03 | Versão inicial do kernel, derivada e genericizada da base de origem. | cortex |
