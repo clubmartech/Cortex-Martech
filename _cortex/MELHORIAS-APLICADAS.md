@@ -132,3 +132,17 @@ Varredura numa instância com cerca de 250 skills de terceiros: nenhum comando m
 | Agente com ferramenta de e-mail, chat ou publicação | ferramentas de envio fora do agente (`disallowedTools` quando o runtime aceita) | idem |
 
 Verificação: testes do CLI, `doctor` e `build` numa instância.
+
+## 2026-11-23 — 0.4.4, sinais de texto de IA no revisor
+
+Uma instância ampliou o catálogo do revisor com padrões recorrentes de texto gerado por IA; nenhum deles depende de marca, então o kernel recebe o mesmo catálogo.
+
+| Problema | Alteração | Onde |
+|---|---|---|
+| Ênfase inflada, atribuição vaga ("estudos mostram"), conexão vaga, cópula evitada e sinônimo pomposo passavam na revisão | novas linhas no catálogo de vícios, com a correção de cada uma | `kernel/revisor.agent.md` |
+| Paralelismo negativo, conclusão-esquema e fecho-resumo | idem; a negação de posicionamento autorizada pelo brandcenter não é vício | idem |
+| Vazamento de conversa, placeholder e rastro de ferramenta (`utm_source=chatgpt.com`) chegavam à entrega | bloqueiam a entrega; dois itens novos no checklist | idem |
+
+Fonte dos padrões: "Wikipedia:Signs of AI writing" (CC BY-SA 4.0), adaptados.
+
+Verificação: testes do CLI, `build` e `doctor` nas instâncias.

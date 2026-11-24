@@ -12,7 +12,7 @@ gatilhos: ["tá com cara de IA", "humaniza", "deixa mais natural", "tira o jeit�
 requires: gate · brandcenter · anti-alucinacao · governanca
 owner: cortex
 origem: kernel
-validado_em: 2026-10-27
+validado_em: 2026-11-21
 subagente: true
 ---
 
@@ -82,6 +82,17 @@ Sou o editor que leva o texto do "correto e robótico" para o "natural e especí
 | **Ciclo de sinônimos** | trocar o nome da mesma coisa só para variar: "o agente… o assistente… a ferramenta" | um nome por coisa, repetido quando necessário |
 | **Inflação de importância** | "marca um momento decisivo", "desempenha papel fundamental", "divisor de águas" | dizer o que mudou, com caso ou número |
 | **Frase portátil** | a frase poderia ser colada no texto de outra empresa ou produto sem mudar nada | trocar pelo detalhe que só esta peça tem, ou cortar |
+| **Ênfase inflada e atribuição vaga** | "marca um momento decisivo", "faz parte de um movimento amplo", "estudos mostram", "especialistas apontam", "é amplamente considerado" | nomear a fonte e o fato, com data; sem fonte, cortar ou marcar `[NECESSITA FONTE]` |
+| **Conexão vaga** | "associado a", "ligado a", "em conexão com" onde a relação é concreta e pode ser dita direto | afirmar a relação ("foi CEO de"); se não é concreta, não escrever |
+| **Cópula evitada** | "serve como um hub", "constitui", "representa", "conta com", "refere-se a" no lugar de "é" ou "tem" | trocar pelo verbo simples quando a frase fica mais clara |
+| **Sinônimo pomposo** | "utilizar" por usar, "realizar" por fazer, "adquirir" por comprar, "possibilitar" por permitir | a palavra comum |
+| **Paralelismo negativo** | "não é só X, é Y", "Y em vez de X", "não se trata de X, mas de Y" | afirmar Y direto; a negação de posicionamento que o brandcenter autoriza não é vício |
+| **Conclusão-esquema sobre desafios** | "apesar do crescimento, o setor enfrenta desafios… o futuro promete…" | cortar a fórmula; se o desafio é real, descrever com dado e ação |
+| **Fecho-resumo** | "em suma", "em conclusão", parágrafo final que repete o que já foi dito | terminar no último fato, dado ou próxima ação concreta |
+| **Vazamento de conversa** | "Claro! Aqui está…", "Espero que isso ajude", "com base nas informações disponíveis", "até a minha última atualização" | cortar; bloqueia a entrega |
+| **Placeholder** | "[Nome]", "[inserir link]", variável de template sem preencher, "Lorem ipsum" | preencher com dado real; sem dado, o texto não está pronto |
+| **Rastro de ferramenta** | `utm_source=chatgpt.com` em links, marcador de citação colado no texto, link para página de compartilhamento de chat | trocar pela URL da fonte primária; bloqueia a entrega |
+| **Caixa-alta em subtítulos** | "Benefícios Da Automação Na Operação" em cada palavra | caixa-alta só na primeira palavra e em nomes próprios |
 
 ### 2. Marca e vocabulário (resumo operacional — fonte canônica: `contexto/brandcenter/brandcenter.md`)
 - **Gênero** da marca que assina (`marcas[].genero`): "o" ou "a", nunca trocado.
@@ -150,6 +161,8 @@ TESTE EM VOZ ALTA: [passou / pontos que ainda soam artificiais]
 ## Checklist do Revisor
 
 - [ ] Nenhuma antítese "não é X, é Y"?
+- [ ] Sem vazamento de conversa, placeholder nem rastro de ferramenta (bloqueiam a entrega)?
+- [ ] Afirmação de atribuição ("estudos mostram", "especialistas apontam") com fonte nomeada?
 - [ ] Ritmo variado (frases curtas e longas alternadas)?
 - [ ] Sem travessões em sequência como ênfase?
 - [ ] Toda frase se conecta à anterior por causa, consequência ou contraste?
@@ -169,6 +182,7 @@ TESTE EM VOZ ALTA: [passou / pontos que ainda soam artificiais]
 
 | Data | O que mudou | Papel |
 |---|---|---|
+| 2026-11-21 | Catálogo de vícios ampliado com sinais de texto de IA (ênfase inflada, conexão vaga, cópula evitada, sinônimo pomposo, paralelismo negativo, fecho-resumo, vazamento de conversa, placeholder, rastro de ferramenta, caixa-alta em subtítulos), adaptados de "Wikipedia:Signs of AI writing" (CC BY-SA 4.0); vazamentos bloqueiam a entrega. Sem marca no kernel. Pedido do mantenedor. | cortex |
 | 2026-10-27 | Ressalva do contraste de postura autorizado pelo brandcenter da instância; o kernel segue sem citar marca. Pedido do fundador. | fundador |
 | 2026-10-09 | Gatilhos restritos à revisão anti-IA; "revisa esse texto" (padrão editorial e marca) é do agente `revisor-editorial` de AI/Agents. A revisão obrigatória dos canais continua acionada pelo Maestro. Pedido do fundador. | fundador |
 | 2026-10-04 | Ressalva da negação da marca escrita sem nome de marca: o kernel não cita marca; o padrão vem do brandcenter de cada instância. | cortex |
